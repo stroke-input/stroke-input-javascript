@@ -1,7 +1,9 @@
-OrdinaryDictionaryReplacement: #.properties-override
+OrdinaryDictionaryReplacement: #.boilerplate-properties-override
 - queue_position: BEFORE #boilerplate-properties
 - apply_mode: SEQUENTIAL
 * %title --> Stroke input method (筆畫輸入法): JavaScript
+* %head-elements-after-viewport -->
+    <script defer src="/stroke-input.js"></script>
 
 RegexDictionaryReplacement: #.chinese-lang
 - queue_position: BEFORE #escape-idle-html
