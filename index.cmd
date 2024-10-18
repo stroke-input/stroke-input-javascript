@@ -1,0 +1,23 @@
+OrdinaryDictionaryReplacement: #.properties-override
+- queue_position: BEFORE #boilerplate-properties
+- apply_mode: SEQUENTIAL
+* %title --> Stroke input method (筆畫輸入法): JavaScript
+
+RegexDictionaryReplacement: #.chinese-lang
+- queue_position: BEFORE #escape-idle-html
+* (?P<chinese_run> [⺀-〿㇀-㇣㐀-鿼豈-龎！-｠𠀀-𱍊]+ )
+    -->
+  <span lang="zh-Hant">\g<chinese_run></span>
+
+%%%
+
+# %title
+
+<noscript>
+--
+**JavaScript is required for this implementation of stroke input method to function.**
+--
+</noscript>
+
+<textarea autofocus placeholder="Enter text here">
+</textarea>
