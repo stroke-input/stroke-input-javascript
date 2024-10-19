@@ -1,7 +1,6 @@
 class StrokeTrieNode
 {
   childFromStroke = new Map();
-  isTerminal = false;
   characters = "";
 
   prefixCharacters()
@@ -33,7 +32,6 @@ class StrokeTrie
       }
       node = node.childFromStroke.get(stroke);
     }
-    node.isTerminal = true;
     node.characters = characters;
   }
 
