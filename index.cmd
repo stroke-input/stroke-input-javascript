@@ -3,7 +3,7 @@ OrdinaryDictionaryReplacement: #.boilerplate-properties-override
 - apply_mode: SEQUENTIAL
 * %title --> Stroke input method (筆畫輸入法): JavaScript
 * %head-elements-after-viewport -->
-    <script defer src="/stroke-input.js"></script>
+    <script defer src="stroke-input.js"></script>
 
 RegexDictionaryReplacement: #.chinese-lang
 - queue_position: BEFORE #escape-idle-html
