@@ -73,7 +73,7 @@ class Loader
 
   static async loadSequenceCharactersDataIntoMap()
   {
-    let sequenceCharactersText = await fetch(SEQUENCE_CHARACTERS_FILE_NAME).then(response => response.text());;
+    let sequenceCharactersText = await fetch(SEQUENCE_CHARACTERS_FILE_NAME).then(response => response.text());
     let charactersFromStrokeDigitSequence = new StrokeTrie();
     for (const line of sequenceCharactersText.split("\n"))
     {
