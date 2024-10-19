@@ -1,3 +1,5 @@
+let SEQUENCE_CHARACTERS_FILE_NAME = 'res/sequence-characters.txt';
+
 class StrokeTrieNode
 {
   childFromStroke = new Map();
@@ -71,7 +73,7 @@ class Loader
 
   static async loadSequenceCharactersDataIntoMap()
   {
-    let sequenceCharactersText = await sequenceCharactersPromise;
+    let sequenceCharactersText = await fetch(SEQUENCE_CHARACTERS_FILE_NAME).then(response => response.text());;
     let charactersFromStrokeDigitSequence = new StrokeTrie();
     for (const line of sequenceCharactersText.split("\n"))
     {
@@ -91,7 +93,18 @@ class StrokeInputService
 
   constructor()
   {
-    this.charactersFromStrokeDigitSequence = Loader.loadSequenceCharactersDataIntoMap();
+    this._isInitialised = this._initialise()
+  }
+
+  async _initialise()
+  {
+    this.charactersFromStrokeDigitSequence = await Loader.loadSequenceCharactersDataIntoMap();
+  }
+
+  async lookup(strokeDigitSequence, lookupType)
+  {
+    await this._isInitialised;
+    return this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, lookupType);
   }
 }
 
@@ -265,7 +278,6 @@ function keyListener(event)
   }
 }
 
-let sequenceCharactersPromise = fetch('res/sequence-characters.txt').then(response => response.text());
 let strokeInputService = new StrokeInputService();
 document.addEventListener("keydown", keyListener);
 
