@@ -1,137 +1,170 @@
+function isModified(event)
+{
+  return event.ctrlKey || event.shiftKey || event.altKey || event.metaKey;
+}
+
+function isModifiedCtrlAltMeta(event)
+{
+  return event.ctrlKey || event.altKey || event.metaKey;
+}
+
 function keyListener(event)
 {
+  // Early exit
   // TODO: if stroke input method is disabled return
 
-  event.preventDefault();
+  let key = event.key;
 
-  if (event.repeat)
+  // Toggle stroke input method
+  if (key === "F2" && !isModified(event))
   {
+    event.preventDefault();
+    console.log("TOGGLE_STROKE_INPUT_METHOD"); // TODO
     return;
   }
 
-  switch (event.key)
+  // Toggle candidate order preference
+  if (key === "F9" && !isModified(event))
   {
-    case "F2":
-      console.log("TOGGLE_STROKE_INPUT_METHOD"); // TODO
-      break;
+    event.preventDefault();
+    console.log("TOGGLE_CANDIDATE_ORDER_PREFERENCE"); // TODO
+    return;
+  }
 
-    case "F9":
-      console.log("TOGGLE_CANDIDATE_ORDER_PREFERENCE"); // TODO
-      break;
+  // Stroke 1
+  if (/^[uh]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("STROKE_1"); // TODO
+    return;
+  }
 
-    case "u":
-    case "U":
-    case "h":
-    case "H":
-      console.log("STROKE_1"); // TODO
-      break;
+  // Stroke 2
+  if (/^[is]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("STROKE_2"); // TODO
+    return;
+  }
 
-    case "i":
-    case "I":
-    case "s":
-    case "S":
-      console.log("STROKE_2"); // TODO
-      break;
+  // Stroke 3
+  if (/^[op]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("STROKE_3"); // TODO
+    return;
+  }
 
-    case "o":
-    case "O":
-    case "p":
-    case "P":
-      console.log("STROKE_3"); // TODO
-      break;
+  // Stroke 4
+  if (/^[jd]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("STROKE_4"); // TODO
+    return;
+  }
 
-    case "j":
-    case "J":
-    case "d":
-    case "D":
-      console.log("STROKE_4"); // TODO
-      break;
+  // Stroke 5
+  if (/^[kz]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("STROKE_5"); // TODO
+    return;
+  }
 
-    case "k":
-    case "K":
-    case "z":
-    case "Z":
-      console.log("STROKE_5"); // TODO
-      break;
+  // Backspace
+  if (key === "Backspace")
+  {
+    event.preventDefault();
+    console.log("BACKSPACE"); // TODO: logic for ctrlKey, strokes, selection
+    return;
+  }
 
-    case "Backspace":
-      console.log("BACKSPACE"); // TODO
-      break;
+  // Delete
+  if (key === "Delete")
+  {
+    event.preventDefault();
+    console.log("DELETE"); // TODO: logic for ctrlKey, strokes, selection
+    return;
+  }
 
-    case "Delete":
-      console.log("DELETE"); // TODO
+  // Space
+  if (key === " " && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("SPACE"); // TODO: logic for ctrlKey, strokes, selection
+    return;
+  }
 
-    case " ":
-      console.log("SPACE"); // TODO
-      break;
+  // Enter
+  if (key === "Enter")
+  {
+    event.preventDefault();
+    console.log("ENTER"); // TODO: logic for strokes, selection
+    return;
+  }
 
-    case "Enter":
-      console.log("ENTER"); // TODO
-      break;
+  // Candidate selection
+  if (/^[0-9]$/.test(key) && !isModified(event))
+  {
+    event.preventDefault();
+    let candidate_index = (+(key) + 9) % 10;
+    console.log(`DISPLAYED_CANDIDATE_${candidate_index}`); // TODO: logic
+    return;
+  }
 
-    case "0":
-    case "1":
-    case "2":
-    case "3":
-    case "4":
-    case "5":
-    case "6":
-    case "7":
-    case "8":
-    case "9":
-      let candidate_index = (+(event.key) + 9) % 10;
-      console.log(`DISPLAYED_CANDIDATE_${candidate_index}`); // TODO
-      break;
+  // Ordinary punctuation
+  if (/^[;\\?!,.():~]$/.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log(`ORDINARY_PUNCTUATION_${key}`); // TODO
+    return;
+  }
 
-    case ";":
-    case "\\":
-    case "?":
-    case "!":
-    case ",":
-    case ".":
-    case "(":
-    case ")":
-    case ":":
-    case "~":
-      let ordinary_punctuation = event.key;
-      console.log(`ORDINARY_PUNCTUATION_${ordinary_punctuation}`); // TODO
-      break;
+  // Symbol classes
+  if (/^['"\[\]{}<>|`$*%=]$/.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log(`SYMBOL_CLASS_${key}`); // TODO
+    return;
+  }
 
-    case "'":
-    case '"':
-    case "[":
-    case "]":
-    case "<":
-    case ">":
-    case "|":
-    case "`":
-    case "$":
-    case "*":
-    case "%":
-    case "=":
-      let symbol_class = event.key;
-      console.log(`SYMBOL_CLASS_${symbol_class}`); // TODO
-      break;
+  // Candidates first page
+  if (key === "Home" && !isModified(event))
+  {
+    event.preventDefault();
+    console.log("CANDIDATES_PAGE_FIRST"); // TODO: logic
+    return;
+  }
 
-    case "Home":
-      console.log("PAGE_FIRST"); // TODO
-      break;
+  // Candidates last page
+  if (key === "End" && !isModified(event))
+  {
+    event.preventDefault();
+    console.log("CANDIDATES_PAGE_LAST"); // TODO: logic
+    return;
+  }
 
-    case "End":
-      console.log("PAGE_LAST"); // TODO
-      break;
+  // Candidates previous page
+  if (["PageUp", "ArrowUp", "ArrowLeft"].includes(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("CANDIDATES_PAGE_PREVIOUS"); // TODO: logic
+    return;
+  }
 
-    case "PageUp":
-    case "ArrowUp":
-    case "ArrowLeft":
-      console.log("PAGE_PREVIOUS"); // TODO
-      break;
+  // Candidates next page
+  if (["PageDown", "ArrowDown", "ArrowRight"].includes(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    console.log("CANDIDATES_PAGE_NEXT"); // TODO: logic
+    return;
+  }
 
-    case "PageDown":
-    case "ArrowDown":
-    case "ArrowRight":
-      console.log("PAGE_NEXT"); // TODO
-      break;
+  // Catch-all for printable ASCII
+  if (/^[!-~]$/.test(key) && !isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    return;
   }
 }
 
