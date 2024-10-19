@@ -280,16 +280,3 @@ function keyListener(event)
 
 let strokeInputService = new StrokeInputService();
 document.addEventListener("keydown", keyListener);
-
-let st = new StrokeTrie();
-st.insert("1", "一");
-st.insert("11", "二");
-st.insert("111", "三");
-st.insert("1234", "木朩");
-st.insert("251", "卂口囗");
-st.insert("2511", "丮冃冄日曰");
-
-for (const s of ["1", "11", "111", "25", "251", "2511", "25112", "1234", "12345"])
-{
-  console.log([s, st.lookup(s, "exact"), st.lookup(s, "prefix")]);
-}
