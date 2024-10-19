@@ -7,7 +7,7 @@ class StrokeTrieNode
   {
     let characters = this.characters;
 
-    for (const [_, child] of this.childFromStroke)
+    for (const child of this.childFromStroke.values())
     {
       characters += child.prefixCharacters();
     }
