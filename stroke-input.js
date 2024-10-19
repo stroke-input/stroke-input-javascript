@@ -1,4 +1,6 @@
 let SEQUENCE_CHARACTERS_FILE_NAME = "res/sequence-characters.txt";
+let CHARACTERS_FILE_NAME_TRADITIONAL = "res/characters-traditional.txt";
+let CHARACTERS_FILE_NAME_SIMPLIFIED = "res/characters-simplified.txt";
 
 class StrokeTrieNode
 {
@@ -71,9 +73,9 @@ class Loader
     return line.startsWith("#") || !line;
   }
 
-  static async loadSequenceCharactersDataIntoMap()
+  static async toSequenceCharactersMap(sequenceCharactersFileName)
   {
-    let sequenceCharactersText = await fetch(SEQUENCE_CHARACTERS_FILE_NAME).then(response => response.text());
+    let sequenceCharactersText = await fetch(sequenceCharactersFileName).then(response => response.text());
     let charactersFromStrokeDigitSequence = new StrokeTrie();
     for (const line of sequenceCharactersText.split("\n"))
     {
@@ -85,11 +87,27 @@ class Loader
     }
     return charactersFromStrokeDigitSequence;
   }
+
+  static async toCharactersCodePointSet(charactersFileName)
+  {
+    let charactersText = await fetch(charactersFileName).then(response => response.text());
+    let codePoints = new Set();
+    for (const line of charactersText.split("\n"))
+    {
+      if (!Loader.isCommentLine(line))
+      {
+        codePoints.add(line.codePointAt(0));
+      }
+    }
+    return codePoints;
+  }
 }
 
 class StrokeInputService
 {
   charactersFromStrokeDigitSequence = null;
+  codePointsTraditional = null;
+  codePointsSimplified = null;
 
   constructor()
   {
@@ -98,14 +116,18 @@ class StrokeInputService
 
   async _initialise()
   {
-    this.charactersFromStrokeDigitSequence = await Loader.loadSequenceCharactersDataIntoMap();
+    this.charactersFromStrokeDigitSequence = await Loader.toSequenceCharactersMap(SEQUENCE_CHARACTERS_FILE_NAME);
+    this.codePointsTraditional = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_TRADITIONAL);
+    this.codePointsSimplified = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_SIMPLIFIED);
   }
 
+  /*
   async lookup(strokeDigitSequence, lookupType)
   {
     await this._isInitialised;
     return this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, lookupType);
   }
+  */
 }
 
 function isModified(event)
