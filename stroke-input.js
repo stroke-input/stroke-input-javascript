@@ -1,4 +1,4 @@
-let SEQUENCE_CHARACTERS_FILE_NAME = 'res/sequence-characters.txt';
+let SEQUENCE_CHARACTERS_FILE_NAME = "res/sequence-characters.txt";
 
 class StrokeTrieNode
 {
@@ -68,7 +68,7 @@ class Loader
 {
   static isCommentLine(line)
   {
-    return line.startsWith('#') || !line;
+    return line.startsWith("#") || !line;
   }
 
   static async loadSequenceCharactersDataIntoMap()
