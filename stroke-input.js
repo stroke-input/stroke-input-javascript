@@ -20,11 +20,11 @@ class StrokeTrie
 {
   rootNode = new StrokeTrieNode();
 
-  insert(strokeSequence, characters)
+  insert(strokeDigitSequence, characters)
   {
     let node = this.rootNode;
 
-    for (const stroke of strokeSequence)
+    for (const stroke of strokeDigitSequence)
     {
       if (!node.childFromStroke.has(stroke))
       {
@@ -35,11 +35,11 @@ class StrokeTrie
     node.characters = characters;
   }
 
-  lookup(strokeSequence, lookupType)
+  lookup(strokeDigitSequence, lookupType)
   {
     let node = this.rootNode;
 
-    for (const stroke of strokeSequence)
+    for (const stroke of strokeDigitSequence)
     {
       if (!node.childFromStroke.has(stroke))
       {
@@ -62,11 +62,38 @@ class StrokeTrie
   }
 }
 
-class StrokeInputService
+class Loader
 {
-  #charactersFromStrokeDigitSequence = new StrokeTrie();
+  static isCommentLine(line)
+  {
+    return line.startsWith('#') || !line;
+  }
+
+  static async loadSequenceCharactersDataIntoMap()
+  {
+    let sequenceCharactersText = await sequenceCharactersPromise;
+    let charactersFromStrokeDigitSequence = new StrokeTrie();
+    for (const line of sequenceCharactersText.split("\n"))
+    {
+      if (!Loader.isCommentLine(line))
+      {
+        let [strokeDigitSequence, characters] = line.split("\t");
+        charactersFromStrokeDigitSequence.insert(strokeDigitSequence, characters);
+      }
+    }
+    return charactersFromStrokeDigitSequence;
+  }
 }
 
+class StrokeInputService
+{
+  charactersFromStrokeDigitSequence = null;
+
+  constructor()
+  {
+    this.charactersFromStrokeDigitSequence = Loader.loadSequenceCharactersDataIntoMap();
+  }
+}
 
 function isModified(event)
 {
@@ -238,6 +265,8 @@ function keyListener(event)
   }
 }
 
+let sequenceCharactersPromise = fetch('res/sequence-characters.txt').then(response => response.text());
+let strokeInputService = new StrokeInputService();
 document.addEventListener("keydown", keyListener);
 
 let st = new StrokeTrie();
