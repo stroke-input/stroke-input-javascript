@@ -5,13 +5,13 @@ class StrokeTrieNode
   childFromStroke = new Map();
   characters = "";
 
-  prefixCharacters()
+  descendantCharacters()
   {
-    let characters = this.characters;
+    let characters = "";
 
     for (const child of this.childFromStroke.values())
     {
-      characters += child.prefixCharacters();
+      characters += child.characters + child.descendantCharacters();
     }
 
     return characters;
@@ -56,7 +56,7 @@ class StrokeTrie
         return node.characters;
 
       case "prefix":
-        return node.prefixCharacters();
+        return node.descendantCharacters();
 
       default:
         throw new Error(`bad lookupType ${lookupType}`);
