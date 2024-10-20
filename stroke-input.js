@@ -3,6 +3,8 @@ let CHARACTERS_FILE_NAME_TRADITIONAL = "res/characters-traditional.txt";
 let CHARACTERS_FILE_NAME_SIMPLIFIED = "res/characters-simplified.txt";
 let RANKING_FILE_NAME_TRADITIONAL = "res/ranking-traditional.txt";
 let RANKING_FILE_NAME_SIMPLIFIED = "res/ranking-simplified.txt";
+let PHRASES_FILE_NAME_TRADITIONAL = "res/phrases-traditional.txt";
+let PHRASES_FILE_NAME_SIMPLIFIED = "res/phrases-simplified.txt";
 
 let LAG_PREVENTION_CODE_POINT_COUNT = 1400;
 
@@ -130,7 +132,6 @@ class Loader
   static async toRankingData(rankingFileName)
   {
     let rankingText = await fetch(rankingFileName).then(response => response.text());
-
     let sortingRankFromCodePoint = new Map();
     let commonCodePoints = new Set();
     let currentRank = 0;
@@ -153,8 +154,21 @@ class Loader
         }
       }
     }
-
     return [sortingRankFromCodePoint, commonCodePoints];
+  }
+
+  static async toPhrases(phrasesFileName)
+  {
+    let phrasesText = await fetch(phrasesFileName).then(response => response.text());
+    let phrases = new Set();
+    for (const line of phrasesText.split("\n"))
+    {
+      if (!Loader.isCommentLine(line))
+      {
+        phrases.add(line);
+      }
+    }
+    return phrases;
   }
 }
 
@@ -167,6 +181,8 @@ class StrokeInputService
   sortingRankFromCodePointSimplified = null;
   commonCodePointSetTraditional = null;
   commonCodePointSetSimplified = null;
+  phrasesTraditional = null;
+  phrasesSimplified = null;
 
   constructor()
   {
@@ -180,6 +196,8 @@ class StrokeInputService
     this.codePointsSimplified = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_SIMPLIFIED);
     [this.sortingRankFromCodePointTraditional, this.commonCodePointSetTraditional] = await Loader.toRankingData(RANKING_FILE_NAME_TRADITIONAL);
     [this.sortingRankFromCodePointSimplified, this.commonCodePointSetSimplified] = await Loader.toRankingData(RANKING_FILE_NAME_SIMPLIFIED);
+    this.phrasesTraditional = await Loader.toPhrases(PHRASES_FILE_NAME_TRADITIONAL);
+    this.phrasesSimplified = await Loader.toPhrases(PHRASES_FILE_NAME_SIMPLIFIED);
   }
 
   /*
