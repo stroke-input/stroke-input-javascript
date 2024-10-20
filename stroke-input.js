@@ -267,7 +267,8 @@ function keyListener(event, strokeInputService)
   if (key === "F9" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
-    console.log("TOGGLE_CANDIDATE_ORDER_PREFERENCE"); // TODO
+    strokeInputService.isTraditionalPreferred = !strokeInputService.isTraditionalPreferred;
+    strokeInputService.updateCandidateOrderPreference();
     return;
   }
 
