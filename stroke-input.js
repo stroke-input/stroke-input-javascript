@@ -162,7 +162,7 @@ class Loader
     return [sortingRankFromCodePoint, commonCodePoints];
   }
 
-  static async toPhrases(phrasesFileName)
+  static async toPhraseSet(phrasesFileName)
   {
     let phrasesText = await fetch(phrasesFileName).then(response => response.text());
 
@@ -186,10 +186,16 @@ class StrokeInputService
   codePointsSimplified = null;
   sortingRankFromCodePointTraditional = null;
   sortingRankFromCodePointSimplified = null;
-  commonCodePointSetTraditional = null;
-  commonCodePointSetSimplified = null;
+  commonCodePointsTraditional = null;
+  commonCodePointsSimplified = null;
   phrasesTraditional = null;
   phrasesSimplified = null;
+
+  isTraditionalPreferred = true;
+  unpreferredCodePoints = null;
+  sortingRankFromCodePoint = null;
+  commonCodePoints = null;
+  phrases = null;
 
   constructor()
   {
@@ -201,10 +207,12 @@ class StrokeInputService
     this.charactersFromStrokeDigitSequence = await Loader.toSequenceCharactersMap(SEQUENCE_CHARACTERS_FILE_NAME);
     this.codePointsTraditional = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_TRADITIONAL);
     this.codePointsSimplified = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_SIMPLIFIED);
-    [this.sortingRankFromCodePointTraditional, this.commonCodePointSetTraditional] = await Loader.toRankingData(RANKING_FILE_NAME_TRADITIONAL);
-    [this.sortingRankFromCodePointSimplified, this.commonCodePointSetSimplified] = await Loader.toRankingData(RANKING_FILE_NAME_SIMPLIFIED);
-    this.phrasesTraditional = await Loader.toPhrases(PHRASES_FILE_NAME_TRADITIONAL);
-    this.phrasesSimplified = await Loader.toPhrases(PHRASES_FILE_NAME_SIMPLIFIED);
+    [this.sortingRankFromCodePointTraditional, this.commonCodePointsTraditional] = await Loader.toRankingData(RANKING_FILE_NAME_TRADITIONAL);
+    [this.sortingRankFromCodePointSimplified, this.commonCodePointsSimplified] = await Loader.toRankingData(RANKING_FILE_NAME_SIMPLIFIED);
+    this.phrasesTraditional = await Loader.toPhraseSet(PHRASES_FILE_NAME_TRADITIONAL);
+    this.phrasesSimplified = await Loader.toPhraseSet(PHRASES_FILE_NAME_SIMPLIFIED);
+
+    this.updateCandidateOrderPreference();
   }
 
   /*
@@ -214,6 +222,26 @@ class StrokeInputService
     return this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, lookupType);
   }
   */
+
+  async updateCandidateOrderPreference()
+  {
+    await this._isInitialised;
+
+    if (this.isTraditionalPreferred)
+    {
+      this.unpreferredCodePoints = this.codePointsSimplified;
+      this.sortingRankFromCodePoint = this.sortingRankFromCodePointTraditional;
+      this.commonCodePoints = this.commonCodePointsTraditional;
+      this.phrases = this.phrasesTraditional;
+    }
+    else
+    {
+      this.unpreferredCodePoints = this.codePointsTraditional;
+      this.sortingRankFromCodePoint = this.sortingRankFromCodePointSimplified;
+      this.commonCodePoints = this.commonCodePointsSimplified;
+      this.phrases = this.phrasesSimplified;
+    }
+  }
 }
 
 function isModified(event)
