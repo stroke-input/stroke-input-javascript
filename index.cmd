@@ -21,5 +21,10 @@ RegexDictionaryReplacement: #.chinese-lang
 --
 </noscript>
 
+||||
+||
+Stroke Input Service: <span id="enabled-status">uninitialised</span>
+||
 <textarea autofocus placeholder="Enter text here">
 </textarea>
+||||

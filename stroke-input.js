@@ -194,7 +194,7 @@ class Loader
 
 class StrokeInputService
 {
-  isEnabled = true;
+  isEnabled = null;
 
   charactersFromStrokeDigitSequence = null;
   codePointsTraditional = null;
@@ -206,7 +206,7 @@ class StrokeInputService
   phrasesTraditional = null;
   phrasesSimplified = null;
 
-  isTraditionalPreferred = true;
+  isTraditionalPreferred = null;
   unpreferredCodePoints = null;
   sortingRankFromCodePoint = null;
   commonCodePoints = null;
@@ -214,10 +214,10 @@ class StrokeInputService
 
   constructor()
   {
-    this._isInitialised = this._initialise()
+    this._isLoaded = this._loadData()
   }
 
-  async _initialise()
+  async _loadData()
   {
     this.charactersFromStrokeDigitSequence = await Loader.toSequenceCharactersMap(SEQUENCE_CHARACTERS_FILE_NAME);
     this.codePointsTraditional = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_TRADITIONAL);
@@ -226,13 +226,23 @@ class StrokeInputService
     [this.sortingRankFromCodePointSimplified, this.commonCodePointsSimplified] = await Loader.toRankingData(RANKING_FILE_NAME_SIMPLIFIED);
     this.phrasesTraditional = await Loader.toPhraseSet(PHRASES_FILE_NAME_TRADITIONAL);
     this.phrasesSimplified = await Loader.toPhraseSet(PHRASES_FILE_NAME_SIMPLIFIED);
+  }
 
+  async initialise()
+  {
+    await this._isLoaded;
+
+    this.isEnabled = true;
+    this.isTraditionalPreferred = true;
     this.updateCandidateOrderPreference();
+
+    UserInterface.updateEnabledStatus(this.isEnabled);
+    UserInterface.initialiseKeys(this);
   }
 
   async updateCandidateOrderPreference()
   {
-    await this._isInitialised;
+    await this._isLoaded;
 
     if (this.isTraditionalPreferred)
     {
@@ -251,6 +261,20 @@ class StrokeInputService
   }
 }
 
+class UserInterface
+{
+  static initialiseKeys(strokeInputService)
+  {
+    document.addEventListener("keydown", event => keyListener(event, strokeInputService));
+  }
+
+  static updateEnabledStatus(isEnabled)
+  {
+    let enabledStatusText = isEnabled ? "enabled" : "disabled";
+    document.getElementById("enabled-status").textContent = enabledStatusText;
+  }
+}
+
 function keyListener(event, strokeInputService)
 {
   let key = event.key;
@@ -260,6 +284,7 @@ function keyListener(event, strokeInputService)
   {
     event.preventDefault();
     strokeInputService.isEnabled = !strokeInputService.isEnabled;
+    UserInterface.updateEnabledStatus(strokeInputService.isEnabled);
     return;
   }
 
@@ -416,4 +441,4 @@ function keyListener(event, strokeInputService)
 }
 
 let strokeInputService = new StrokeInputService();
-document.addEventListener("keydown", event => keyListener(event, strokeInputService));
+strokeInputService.initialise();
