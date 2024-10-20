@@ -40,6 +40,11 @@ class Stringy
 
     return codePoints;
   }
+
+  static removeLastCharacter(string)
+  {
+    return [...string].slice(0, -1).join("") ;
+  }
 }
 
 class StrokeTrieNode
@@ -281,6 +286,30 @@ class StrokeInputService
     }
   }
 
+  async effectBackspace()
+  {
+    if (this.strokeDigitSequence)
+    {
+      let newStrokeDigitSequence = Stringy.removeLastCharacter(this.strokeDigitSequence);
+      let newCandidates = await this.computeCandidates(newStrokeDigitSequence);
+
+      this.strokeDigitSequence = newStrokeDigitSequence;
+      this.candidates = newCandidates;
+
+      UserInterface.updateStrokeSequence(this.strokeDigitSequence);
+      UserInterface.updateCandidates(this.candidates);
+
+      if (!newStrokeDigitSequence)
+      {
+        // TODO: phrase completion
+      }
+    }
+    else
+    {
+      // TODO: erasure plus phrase completion etc.
+    }
+  }
+
   async computeCandidates(strokeDigitSequence)
   {
     await this._isLoaded;
@@ -291,7 +320,6 @@ class StrokeInputService
     }
 
     let exactMatches = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact"); // TODO: other logic
-    console.log(exactMatches);
     return exactMatches;
   }
 }
@@ -408,7 +436,7 @@ async function keyListener(event, strokeInputService)
   if (key === "Backspace")
   {
     event.preventDefault();
-    console.log("BACKSPACE"); // TODO: logic for ctrlKey, strokes, selection
+    strokeInputService.effectBackspace();
     return;
   }
 
