@@ -320,7 +320,7 @@ function keyListener(event, strokeInputService)
   }
 
   // Stroke 3
-  if (/^[op]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[op]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("STROKE_3"); // TODO
