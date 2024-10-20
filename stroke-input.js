@@ -2,6 +2,14 @@ let SEQUENCE_CHARACTERS_FILE_NAME = "res/sequence-characters.txt";
 let CHARACTERS_FILE_NAME_TRADITIONAL = "res/characters-traditional.txt";
 let CHARACTERS_FILE_NAME_SIMPLIFIED = "res/characters-simplified.txt";
 
+class Stringy
+{
+  static getFirstCodePoint(string)
+  {
+    return string.codePointAt(0);
+  }
+}
+
 class StrokeTrieNode
 {
   childFromStroke = new Map();
@@ -96,7 +104,7 @@ class Loader
     {
       if (!Loader.isCommentLine(line))
       {
-        codePoints.add(line.codePointAt(0));
+        codePoints.add(Stringy.getFirstCodePoint(line));
       }
     }
     return codePoints;
