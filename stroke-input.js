@@ -43,7 +43,7 @@ class Stringy
 
   static removeLastCharacter(string)
   {
-    return [...string].slice(0, -1).join("") ;
+    return [...string].slice(0, -1).join("");
   }
 }
 
