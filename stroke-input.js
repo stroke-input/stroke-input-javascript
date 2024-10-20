@@ -237,6 +237,7 @@ class StrokeInputService
     this.updateCandidateOrderPreference();
 
     UserInterface.updateEnabledStatus(this.isEnabled);
+    UserInterface.updateCandidateOrderStatus(this.isTraditionalPreferred);
     UserInterface.initialiseKeys(this);
   }
 
@@ -273,6 +274,12 @@ class UserInterface
     let enabledStatusText = isEnabled ? "enabled" : "disabled";
     document.getElementById("enabled-status").textContent = enabledStatusText;
   }
+
+  static updateCandidateOrderStatus(isTraditionalPreferred)
+  {
+    let candidateOrderStatusText = isTraditionalPreferred ? "Traditional first" : "Simplified first";
+    document.getElementById("candidate-order-status").textContent = candidateOrderStatusText;
+  }
 }
 
 function keyListener(event, strokeInputService)
@@ -294,6 +301,7 @@ function keyListener(event, strokeInputService)
     event.preventDefault();
     strokeInputService.isTraditionalPreferred = !strokeInputService.isTraditionalPreferred;
     strokeInputService.updateCandidateOrderPreference();
+    UserInterface.updateCandidateOrderStatus(strokeInputService.isTraditionalPreferred);
     return;
   }
 

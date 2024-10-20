@@ -25,6 +25,9 @@ RegexDictionaryReplacement: #.chinese-lang
 ||
 Stroke Input Service: <span id="enabled-status">uninitialised</span>
 ||
+||
+Candidate order: <span id="candidate-order-status">uninitialised</span>
+||
 <textarea autofocus placeholder="Enter text here">
 </textarea>
 ||||
