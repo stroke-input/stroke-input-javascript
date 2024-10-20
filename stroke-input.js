@@ -103,6 +103,7 @@ class Loader
   static async toSequenceCharactersMap(sequenceCharactersFileName)
   {
     let sequenceCharactersText = await fetch(sequenceCharactersFileName).then(response => response.text());
+
     let charactersFromStrokeDigitSequence = new StrokeTrie();
     for (const line of sequenceCharactersText.split("\n"))
     {
@@ -112,12 +113,14 @@ class Loader
         charactersFromStrokeDigitSequence.insert(strokeDigitSequence, characters);
       }
     }
+
     return charactersFromStrokeDigitSequence;
   }
 
   static async toCharactersCodePointSet(charactersFileName)
   {
     let charactersText = await fetch(charactersFileName).then(response => response.text());
+
     let codePoints = new Set();
     for (const line of charactersText.split("\n"))
     {
@@ -126,16 +129,17 @@ class Loader
         codePoints.add(Stringy.getFirstCodePoint(line));
       }
     }
+
     return codePoints;
   }
 
   static async toRankingData(rankingFileName)
   {
     let rankingText = await fetch(rankingFileName).then(response => response.text());
+
     let sortingRankFromCodePoint = new Map();
     let commonCodePoints = new Set();
     let currentRank = 0;
-
     for (const line of rankingText.split("\n"))
     {
       if (!Loader.isCommentLine(line))
@@ -154,12 +158,14 @@ class Loader
         }
       }
     }
+
     return [sortingRankFromCodePoint, commonCodePoints];
   }
 
   static async toPhrases(phrasesFileName)
   {
     let phrasesText = await fetch(phrasesFileName).then(response => response.text());
+
     let phrases = new Set();
     for (const line of phrasesText.split("\n"))
     {
@@ -168,6 +174,7 @@ class Loader
         phrases.add(line);
       }
     }
+
     return phrases;
   }
 }
