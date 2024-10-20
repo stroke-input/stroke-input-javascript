@@ -194,6 +194,8 @@ class Loader
 
 class StrokeInputService
 {
+  isEnabled = true;
+
   charactersFromStrokeDigitSequence = null;
   codePointsTraditional = null;
   codePointsSimplified = null;
@@ -249,18 +251,15 @@ class StrokeInputService
   }
 }
 
-function keyListener(event)
+function keyListener(event, strokeInputService)
 {
-  // Early exit
-  // TODO: if stroke input method is disabled return
-
   let key = event.key;
 
   // Toggle stroke input method
   if (key === "F2" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
-    console.log("TOGGLE_STROKE_INPUT_METHOD"); // TODO
+    strokeInputService.isEnabled = !strokeInputService.isEnabled;
     return;
   }
 
@@ -269,6 +268,12 @@ function keyListener(event)
   {
     event.preventDefault();
     console.log("TOGGLE_CANDIDATE_ORDER_PREFERENCE"); // TODO
+    return;
+  }
+
+  // Early exit if stroke input not enabled
+  if (!strokeInputService.isEnabled)
+  {
     return;
   }
 
@@ -410,4 +415,4 @@ function keyListener(event)
 }
 
 let strokeInputService = new StrokeInputService();
-document.addEventListener("keydown", keyListener);
+document.addEventListener("keydown", event => keyListener(event, strokeInputService));
