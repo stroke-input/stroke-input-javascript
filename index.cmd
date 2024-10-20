@@ -31,10 +31,19 @@ RegexDictionaryReplacement: #.chinese-lang
   ,{#enabled-status} uninitialised
 //
   ; Candidate order
-  ,{#candidate-order-status} uninitialised
+  ,{#candidate-order} uninitialised
 '''
 
 <textarea autofocus placeholder="Enter text here">
 </textarea>
+
+'''
+//
+  ; Stroke sequence
+  ,{#stroke-sequence}
+//
+  ; Candidates
+  ,{#candidates}
+'''
 
 ||||

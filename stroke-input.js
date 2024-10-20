@@ -212,6 +212,10 @@ class StrokeInputService
   commonCodePoints = null;
   phrases = null;
 
+  strokeDigitSequence = "";
+  candidates = [];
+  // TODO: phraseCompletionFirstCodePoints = [];
+
   constructor()
   {
     this._isLoaded = this._loadData()
@@ -237,7 +241,7 @@ class StrokeInputService
     this.updateCandidateOrderPreference();
 
     UserInterface.updateEnabledStatus(this.isEnabled);
-    UserInterface.updateCandidateOrderStatus(this.isTraditionalPreferred);
+    UserInterface.updateCandidateOrder(this.isTraditionalPreferred);
     UserInterface.initialiseKeys(this);
   }
 
@@ -260,6 +264,36 @@ class StrokeInputService
       this.phrases = this.phrasesSimplified;
     }
   }
+
+  async effectStrokeAppend(strokeDigit)
+  {
+    await this._isLoaded;
+
+    let newStrokeDigitSequence = this.strokeDigitSequence + strokeDigit;
+    let newCandidates = await this.computeCandidates(newStrokeDigitSequence);
+    if (newCandidates)
+    {
+      this.strokeDigitSequence = newStrokeDigitSequence;
+      this.candidates = newCandidates;
+
+      UserInterface.updateStrokeSequence(this.strokeDigitSequence);
+      UserInterface.updateCandidates(this.candidates);
+    }
+  }
+
+  async computeCandidates(strokeDigitSequence)
+  {
+    await this._isLoaded;
+
+    if (!strokeDigitSequence)
+    {
+      return [];
+    }
+
+    let exactMatches = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact"); // TODO: other logic
+    console.log(exactMatches);
+    return exactMatches;
+  }
 }
 
 class UserInterface
@@ -275,10 +309,26 @@ class UserInterface
     document.getElementById("enabled-status").textContent = enabledStatusText;
   }
 
-  static updateCandidateOrderStatus(isTraditionalPreferred)
+  static updateCandidateOrder(isTraditionalPreferred)
   {
     let candidateOrderStatusText = isTraditionalPreferred ? "Traditional first" : "Simplified first";
-    document.getElementById("candidate-order-status").textContent = candidateOrderStatusText;
+    document.getElementById("candidate-order").textContent = candidateOrderStatusText;
+
+    let elementLanguage = isTraditionalPreferred ? "zh-Hant" : "zh-Hans";
+    document.getElementById("stroke-sequence").lang = elementLanguage;
+    document.getElementById("candidates").lang = elementLanguage;
+  }
+
+  static updateStrokeSequence(strokeDigitSequence)
+  {
+    let strokeSeqenceText = strokeDigitSequence; // TODO: actual stroke characters
+    document.getElementById("stroke-sequence").textContent = strokeSeqenceText;
+  }
+
+  static updateCandidates(candidates) // TODO: pagination and separation
+  {
+    let candidatesText = candidates;
+    document.getElementById("candidates").textContent = candidatesText;
   }
 }
 
@@ -301,7 +351,7 @@ function keyListener(event, strokeInputService)
     event.preventDefault();
     strokeInputService.isTraditionalPreferred = !strokeInputService.isTraditionalPreferred;
     strokeInputService.updateCandidateOrderPreference();
-    UserInterface.updateCandidateOrderStatus(strokeInputService.isTraditionalPreferred);
+    UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
     return;
   }
 
@@ -315,7 +365,7 @@ function keyListener(event, strokeInputService)
   if (/^[uh]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("STROKE_1"); // TODO
+    strokeInputService.effectStrokeAppend(1);
     return;
   }
 
@@ -323,7 +373,7 @@ function keyListener(event, strokeInputService)
   if (/^[is]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("STROKE_2"); // TODO
+    strokeInputService.effectStrokeAppend(2);
     return;
   }
 
@@ -331,7 +381,7 @@ function keyListener(event, strokeInputService)
   if (/^[op]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("STROKE_3"); // TODO
+    strokeInputService.effectStrokeAppend(3);
     return;
   }
 
@@ -339,7 +389,7 @@ function keyListener(event, strokeInputService)
   if (/^[jd]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("STROKE_4"); // TODO
+    strokeInputService.effectStrokeAppend(4);
     return;
   }
 
@@ -347,7 +397,7 @@ function keyListener(event, strokeInputService)
   if (/^[kz]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("STROKE_5"); // TODO
+    strokeInputService.effectStrokeAppend(5);
     return;
   }
 
