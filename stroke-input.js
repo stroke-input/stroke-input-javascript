@@ -8,6 +8,19 @@ let PHRASES_FILE_NAME_SIMPLIFIED = "res/phrases-simplified.txt";
 
 let LAG_PREVENTION_CODE_POINT_COUNT = 1400;
 
+class Keyboardy
+{
+  static isModified(event)
+  {
+    return event.ctrlKey || event.shiftKey || event.altKey || event.metaKey;
+  }
+
+  static isModifiedCtrlAltMeta(event)
+  {
+    return event.ctrlKey || event.altKey || event.metaKey;
+  }
+}
+
 class Stringy
 {
   static getFirstCodePoint(string)
@@ -236,16 +249,6 @@ class StrokeInputService
   }
 }
 
-function isModified(event)
-{
-  return event.ctrlKey || event.shiftKey || event.altKey || event.metaKey;
-}
-
-function isModifiedCtrlAltMeta(event)
-{
-  return event.ctrlKey || event.altKey || event.metaKey;
-}
-
 function keyListener(event)
 {
   // Early exit
@@ -254,7 +257,7 @@ function keyListener(event)
   let key = event.key;
 
   // Toggle stroke input method
-  if (key === "F2" && !isModified(event))
+  if (key === "F2" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
     console.log("TOGGLE_STROKE_INPUT_METHOD"); // TODO
@@ -262,7 +265,7 @@ function keyListener(event)
   }
 
   // Toggle candidate order preference
-  if (key === "F9" && !isModified(event))
+  if (key === "F9" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
     console.log("TOGGLE_CANDIDATE_ORDER_PREFERENCE"); // TODO
@@ -270,7 +273,7 @@ function keyListener(event)
   }
 
   // Stroke 1
-  if (/^[uh]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[uh]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("STROKE_1"); // TODO
@@ -278,7 +281,7 @@ function keyListener(event)
   }
 
   // Stroke 2
-  if (/^[is]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[is]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("STROKE_2"); // TODO
@@ -294,7 +297,7 @@ function keyListener(event)
   }
 
   // Stroke 4
-  if (/^[jd]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[jd]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("STROKE_4"); // TODO
@@ -302,7 +305,7 @@ function keyListener(event)
   }
 
   // Stroke 5
-  if (/^[kz]$/i.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[kz]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("STROKE_5"); // TODO
@@ -326,7 +329,7 @@ function keyListener(event)
   }
 
   // Space
-  if (key === " " && !isModifiedCtrlAltMeta(event))
+  if (key === " " && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("SPACE"); // TODO: logic for ctrlKey, strokes, selection
@@ -342,7 +345,7 @@ function keyListener(event)
   }
 
   // Candidate selection
-  if (/^[0-9]$/.test(key) && !isModified(event))
+  if (/^[0-9]$/.test(key) && !Keyboardy.isModified(event))
   {
     event.preventDefault();
     let candidate_index = (+(key) + 9) % 10;
@@ -351,7 +354,7 @@ function keyListener(event)
   }
 
   // Ordinary punctuation
-  if (/^[;\\?!,.():~]$/.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[;\\?!,.():~]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log(`ORDINARY_PUNCTUATION_${key}`); // TODO
@@ -359,7 +362,7 @@ function keyListener(event)
   }
 
   // Symbol classes
-  if (/^['"\[\]{}<>|`$*%=]$/.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^['"\[\]{}<>|`$*%=]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log(`SYMBOL_CLASS_${key}`); // TODO
@@ -367,7 +370,7 @@ function keyListener(event)
   }
 
   // Candidates first page
-  if (key === "Home" && !isModified(event))
+  if (key === "Home" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
     console.log("CANDIDATES_PAGE_FIRST"); // TODO: logic
@@ -375,7 +378,7 @@ function keyListener(event)
   }
 
   // Candidates last page
-  if (key === "End" && !isModified(event))
+  if (key === "End" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
     console.log("CANDIDATES_PAGE_LAST"); // TODO: logic
@@ -383,7 +386,7 @@ function keyListener(event)
   }
 
   // Candidates previous page
-  if (["PageUp", "ArrowUp", "ArrowLeft"].includes(key) && !isModifiedCtrlAltMeta(event))
+  if (["PageUp", "ArrowUp", "ArrowLeft"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("CANDIDATES_PAGE_PREVIOUS"); // TODO: logic
@@ -391,7 +394,7 @@ function keyListener(event)
   }
 
   // Candidates next page
-  if (["PageDown", "ArrowDown", "ArrowRight"].includes(key) && !isModifiedCtrlAltMeta(event))
+  if (["PageDown", "ArrowDown", "ArrowRight"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("CANDIDATES_PAGE_NEXT"); // TODO: logic
@@ -399,7 +402,7 @@ function keyListener(event)
   }
 
   // Catch-all for printable ASCII
-  if (/^[!-~]$/.test(key) && !isModifiedCtrlAltMeta(event))
+  if (/^[!-~]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     return;
