@@ -215,14 +215,6 @@ class StrokeInputService
     this.updateCandidateOrderPreference();
   }
 
-  /*
-  async lookup(strokeDigitSequence, lookupType)
-  {
-    await this._isInitialised;
-    return this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, lookupType);
-  }
-  */
-
   async updateCandidateOrderPreference()
   {
     await this._isInitialised;
