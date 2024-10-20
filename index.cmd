@@ -22,12 +22,17 @@ RegexDictionaryReplacement: #.chinese-lang
 </noscript>
 
 ||||
-||
-Stroke Input Service: <span id="enabled-status">uninitialised</span>
-||
-||
-Candidate order: <span id="candidate-order-status">uninitialised</span>
-||
+
+'''
+//
+  ; Stroke input
+  ,{#enabled-status} uninitialised
+//
+  ; Candidate order
+  ,{#candidate-order-status} uninitialised
+'''
+
 <textarea autofocus placeholder="Enter text here">
 </textarea>
+
 ||||
