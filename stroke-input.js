@@ -332,7 +332,7 @@ class UserInterface
   }
 }
 
-function keyListener(event, strokeInputService)
+async function keyListener(event, strokeInputService)
 {
   let key = event.key;
 
@@ -351,7 +351,10 @@ function keyListener(event, strokeInputService)
     event.preventDefault();
     strokeInputService.isTraditionalPreferred = !strokeInputService.isTraditionalPreferred;
     strokeInputService.updateCandidateOrderPreference();
+    strokeInputService.candidates = await strokeInputService.computeCandidates(strokeInputService.strokeDigitSequence);
+
     UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
+    UserInterface.updateCandidates(strokeInputService.candidates);
     return;
   }
 
