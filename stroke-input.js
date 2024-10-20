@@ -1,12 +1,29 @@
 let SEQUENCE_CHARACTERS_FILE_NAME = "res/sequence-characters.txt";
 let CHARACTERS_FILE_NAME_TRADITIONAL = "res/characters-traditional.txt";
 let CHARACTERS_FILE_NAME_SIMPLIFIED = "res/characters-simplified.txt";
+let RANKING_FILE_NAME_TRADITIONAL = "res/ranking-traditional.txt";
+let RANKING_FILE_NAME_SIMPLIFIED = "res/ranking-simplified.txt";
+
+let LAG_PREVENTION_CODE_POINT_COUNT = 1400;
 
 class Stringy
 {
   static getFirstCodePoint(string)
   {
     return string.codePointAt(0);
+  }
+
+  static toCodePoints(string)
+  {
+    let codePoints = [];
+
+    for (const character of string)
+    {
+      let codePoint = Stringy.getFirstCodePoint(character);
+      codePoints.push(codePoint);
+    }
+
+    return codePoints;
   }
 }
 
@@ -109,6 +126,36 @@ class Loader
     }
     return codePoints;
   }
+
+  static async toRankingData(rankingFileName)
+  {
+    let rankingText = await fetch(rankingFileName).then(response => response.text());
+
+    let sortingRankFromCodePoint = new Map();
+    let commonCodePoints = new Set();
+    let currentRank = 0;
+
+    for (const line of rankingText.split("\n"))
+    {
+      if (!Loader.isCommentLine(line))
+      {
+        for (const codePoint of Stringy.toCodePoints(line))
+        {
+          currentRank++;
+          if (!sortingRankFromCodePoint.has(codePoint))
+          {
+            sortingRankFromCodePoint.set(codePoint, currentRank);
+          }
+          if (currentRank < LAG_PREVENTION_CODE_POINT_COUNT)
+          {
+            commonCodePoints.add(codePoint);
+          }
+        }
+      }
+    }
+
+    return [sortingRankFromCodePoint, commonCodePoints];
+  }
 }
 
 class StrokeInputService
@@ -116,6 +163,10 @@ class StrokeInputService
   charactersFromStrokeDigitSequence = null;
   codePointsTraditional = null;
   codePointsSimplified = null;
+  sortingRankFromCodePointTraditional = null;
+  sortingRankFromCodePointSimplified = null;
+  commonCodePointSetTraditional = null;
+  commonCodePointSetSimplified = null;
 
   constructor()
   {
@@ -127,6 +178,8 @@ class StrokeInputService
     this.charactersFromStrokeDigitSequence = await Loader.toSequenceCharactersMap(SEQUENCE_CHARACTERS_FILE_NAME);
     this.codePointsTraditional = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_TRADITIONAL);
     this.codePointsSimplified = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_SIMPLIFIED);
+    [this.sortingRankFromCodePointTraditional, this.commonCodePointSetTraditional] = await Loader.toRankingData(RANKING_FILE_NAME_TRADITIONAL);
+    [this.sortingRankFromCodePointSimplified, this.commonCodePointSetSimplified] = await Loader.toRankingData(RANKING_FILE_NAME_SIMPLIFIED);
   }
 
   /*
