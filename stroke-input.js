@@ -173,7 +173,7 @@ class Comparer
     let fineRank;
     let penalty;
 
-    let phraseCompletionListIsEmpty = !phraseCompletionFirstCodePoints;
+    let noPhraseCompletions = !phraseCompletionFirstCodePoints.length;
     let phraseCompletionIndex = phraseCompletionFirstCodePoints.indexOf(firstCodePoint);
     let firstCodePointMatchesPhraseCompletionCandidate = phraseCompletionIndex > 0;
 
@@ -193,7 +193,7 @@ class Comparer
               ? RANKING_PENALTY_UNPREFERRED
               : 0;
 
-    if (phraseCompletionListIsEmpty)
+    if (noPhraseCompletions)
     {
       coarseRank = Number.MIN_SAFE_INTEGER;
       fineRank = sortingRankDefined;
@@ -381,7 +381,7 @@ class StrokeInputService
 
     let newStrokeDigitSequence = this.strokeDigitSequence + strokeDigit;
     let newCandidates = await this.computeCandidates(newStrokeDigitSequence);
-    if (newCandidates)
+    if (newCandidates.length)
     {
       this.strokeDigitSequence = newStrokeDigitSequence;
       this.candidates = newCandidates;
