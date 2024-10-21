@@ -454,7 +454,7 @@ class StrokeInputService
       prefixMatchCodePoints = new Set([...this.commonCodePoints].filter(codePoint => prefixMatchCodePoints.has(codePoint)));
     }
 
-    let prefixMatchCandidateCodePoints = new Array(...prefixMatchCodePoints);
+    let prefixMatchCandidateCodePoints = [...prefixMatchCodePoints];
     prefixMatchCandidateCodePoints.sort(
       Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, this.phraseCompletionFirstCodePoints)
     );
