@@ -7,6 +7,14 @@ let PHRASES_FILE_NAME_TRADITIONAL = "res/phrases-traditional.txt";
 let PHRASES_FILE_NAME_SIMPLIFIED = "res/phrases-simplified.txt";
 
 let LAG_PREVENTION_CODE_POINT_COUNT = 1400;
+let CJK_MAIN_CODE_POINT_START = 0x4E00;
+let CJK_MAIN_CODE_POINT_END = 0x9FFF;
+let CJK_EXTENSION_CODE_POINT_MIN = 0x3400;
+let CJK_EXTENSION_CODE_POINT_MAX = 0x2CEAF;
+let RANKING_PENALTY_CJK_EXTENSION = CJK_MAIN_CODE_POINT_END - CJK_EXTENSION_CODE_POINT_MIN + 1;
+let RANKING_PENALTY_PER_CHAR = 2 * CJK_EXTENSION_CODE_POINT_MAX;
+let RANKING_PENALTY_UNPREFERRED = 10 * CJK_EXTENSION_CODE_POINT_MAX;
+let MAX_PREFIX_MATCH_COUNT = 30;
 
 class Keyboardy
 {
@@ -26,6 +34,11 @@ class Stringy
   static getFirstCodePoint(string)
   {
     return string.codePointAt(0);
+  }
+
+  static getLength(string)
+  {
+    return [...string].length;
   }
 
   static toCodePoints(string)
@@ -108,6 +121,98 @@ class StrokeTrie
       default:
         throw new Error(`bad lookupType ${lookupType}`);
     }
+  }
+}
+
+class Comparer
+{
+  static candidateComparator(unpreferredCodePoints, sortingRankFromCodePoint, phraseCompletionFirstCodePoints)
+  {
+    return Comparer.comparatorFunction(
+      string =>
+      Comparer.computeCandidateRank(string, unpreferredCodePoints, sortingRankFromCodePoint, phraseCompletionFirstCodePoints)
+    );
+  }
+
+  static candidateCodePointComparator(unpreferredCodePoints, sortingRankFromCodePoint, phraseCompletionFirstCodePoints)
+  {
+    return Comparer.comparatorFunction(
+      codePoint =>
+      Comparer.computeCandidateRankBasic(codePoint, 1, unpreferredCodePoints, sortingRankFromCodePoint, phraseCompletionFirstCodePoints)
+    );
+  }
+
+  static comparatorFunction(rankFunction)
+  {
+    return (a, b) => rankFunction(a) - rankFunction(b);
+  }
+
+  static computeCandidateRank(string, unpreferredCodePoints, sortingRankFromCodePoint, phraseCompletionFirstCodePoints)
+  {
+    let firstCodePoint = Stringy.getFirstCodePoint(string);
+    let stringLength = Stringy.getLength(string);
+
+    return Comparer.computeCandidateRankBasic(
+      firstCodePoint,
+      stringLength,
+      unpreferredCodePoints,
+      sortingRankFromCodePoint,
+      phraseCompletionFirstCodePoints,
+    );
+  }
+
+  static computeCandidateRankBasic(
+    firstCodePoint,
+    stringLength,
+    unpreferredCodePoints,
+    sortingRankFromCodePoint,
+    phraseCompletionFirstCodePoints,
+  )
+  {
+    let coarseRank;
+    let fineRank;
+    let penalty;
+
+    let phraseCompletionListIsEmpty = !phraseCompletionFirstCodePoints;
+    let phraseCompletionIndex = phraseCompletionFirstCodePoints.indexOf(firstCodePoint);
+    let firstCodePointMatchesPhraseCompletionCandidate = phraseCompletionIndex > 0;
+
+    let sortingRank = sortingRankFromCodePoint.get(firstCodePoint);
+    let cjkBlockPenalty =
+            (firstCodePoint < CJK_MAIN_CODE_POINT_START || firstCodePoint > CJK_MAIN_CODE_POINT_END)
+              ? RANKING_PENALTY_CJK_EXTENSION
+              : 0;
+    let sortingRankDefined =
+            (sortingRank !== undefined)
+              ? sortingRank
+              : firstCodePoint + cjkBlockPenalty;
+
+    let lengthPenalty = (stringLength - 1) * RANKING_PENALTY_PER_CHAR;
+    let unpreferredPenalty =
+            (unpreferredCodePoints.has(firstCodePoint))
+              ? RANKING_PENALTY_UNPREFERRED
+              : 0;
+
+    if (phraseCompletionListIsEmpty)
+    {
+      coarseRank = Number.MIN_SAFE_INTEGER;
+      fineRank = sortingRankDefined;
+      penalty = lengthPenalty + unpreferredPenalty;
+    }
+    else if (firstCodePointMatchesPhraseCompletionCandidate)
+    {
+      coarseRank = Number.MIN_SAFE_INTEGER;
+      fineRank = phraseCompletionIndex;
+      penalty = lengthPenalty;
+    }
+    else
+    {
+      coarseRank = 0;
+      fineRank = sortingRankDefined;
+      penalty = lengthPenalty + unpreferredPenalty;
+    }
+
+    return coarseRank + fineRank + penalty;
   }
 }
 
@@ -219,7 +324,7 @@ class StrokeInputService
 
   strokeDigitSequence = "";
   candidates = [];
-  // TODO: phraseCompletionFirstCodePoints = [];
+  phraseCompletionFirstCodePoints = [];
 
   constructor()
   {
@@ -319,8 +424,50 @@ class StrokeInputService
       return [];
     }
 
-    let exactMatches = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact"); // TODO: other logic
-    return exactMatches;
+    let exactMatches = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact");
+    let exactMatchCandidates;
+    if (exactMatches)
+    {
+      exactMatchCandidates = [...exactMatches];
+      exactMatchCandidates.sort(
+        Comparer.candidateComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, this.phraseCompletionFirstCodePoints)
+      );
+    }
+    else
+    {
+      exactMatchCandidates = [];
+    }
+
+    let prefixMatchCodePoints = new Set();
+    let prefixMatchCharactersCollection = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "prefix");
+
+    for (const characters of prefixMatchCharactersCollection)
+    {
+      for (const codePoint of Stringy.toCodePoints(characters))
+      {
+        prefixMatchCodePoints.add(codePoint);
+      }
+    }
+
+    if (prefixMatchCodePoints.size > LAG_PREVENTION_CODE_POINT_COUNT)
+    {
+      prefixMatchCodePoints = new Set([...this.commonCodePoints].filter(codePoint => prefixMatchCodePoints.has(codePoint)));
+    }
+
+    let prefixMatchCandidateCodePoints = new Array(...prefixMatchCodePoints);
+    prefixMatchCandidateCodePoints.sort(
+      Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, this.phraseCompletionFirstCodePoints)
+    );
+
+    let prefixMatchCandidates = [];
+    for (const prefixMatchCodePoint of prefixMatchCandidateCodePoints.slice(0, MAX_PREFIX_MATCH_COUNT))
+    {
+      prefixMatchCandidates.push(String.fromCodePoint(prefixMatchCodePoint));
+    }
+
+    let candidates = [...exactMatchCandidates, ...prefixMatchCandidates];
+
+    return candidates;
   }
 }
 
