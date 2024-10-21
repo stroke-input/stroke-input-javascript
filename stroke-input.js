@@ -424,11 +424,11 @@ class StrokeInputService
       return [];
     }
 
-    let exactMatches = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact");
     let exactMatchCandidates;
-    if (exactMatches)
+    let exactMatchCharacters = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact");
+    if (exactMatchCharacters)
     {
-      exactMatchCandidates = [...exactMatches];
+      exactMatchCandidates = [...exactMatchCharacters];
       exactMatchCandidates.sort(
         Comparer.candidateComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, this.phraseCompletionFirstCodePoints)
       );
