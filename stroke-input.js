@@ -430,17 +430,8 @@ class StrokeInputService
       exactMatchCandidates = [];
     }
 
-    let prefixMatchCodePoints = new Set();
     let prefixMatchCharactersCollection = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "prefix");
-
-    for (const characters of prefixMatchCharactersCollection)
-    {
-      for (const codePoint of Stringy.toCodePoints(characters))
-      {
-        prefixMatchCodePoints.add(codePoint);
-      }
-    }
-
+    let prefixMatchCodePoints = new Set(Stringy.toCodePoints(prefixMatchCharactersCollection));
     if (prefixMatchCodePoints.size > LAG_PREVENTION_CODE_POINT_COUNT)
     {
       prefixMatchCodePoints = new Set([...this.commonCodePoints].filter(codePoint => prefixMatchCodePoints.has(codePoint)));
