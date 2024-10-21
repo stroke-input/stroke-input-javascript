@@ -43,15 +43,7 @@ class Stringy
 
   static toCodePoints(string)
   {
-    let codePoints = [];
-
-    for (const character of string)
-    {
-      let codePoint = Stringy.getFirstCodePoint(character);
-      codePoints.push(codePoint);
-    }
-
-    return codePoints;
+    return [...string].map(Stringy.getFirstCodePoint);
   }
 
   static removeLastCharacter(string)
@@ -458,15 +450,10 @@ class StrokeInputService
     prefixMatchCandidateCodePoints.sort(
       Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, this.phraseCompletionFirstCodePoints)
     );
-
-    let prefixMatchCandidates = [];
-    for (const prefixMatchCodePoint of prefixMatchCandidateCodePoints.slice(0, MAX_PREFIX_MATCH_COUNT))
-    {
-      prefixMatchCandidates.push(String.fromCodePoint(prefixMatchCodePoint));
-    }
+    prefixMatchCandidateCodePoints = prefixMatchCandidateCodePoints.slice(0, MAX_PREFIX_MATCH_COUNT);
+    let prefixMatchCandidates = [...String.fromCodePoint(...prefixMatchCandidateCodePoints)];
 
     let candidates = [...exactMatchCandidates, ...prefixMatchCandidates];
-
     return candidates;
   }
 }
