@@ -34,7 +34,7 @@ RegexDictionaryReplacement: #.chinese-lang
   ,{#candidate-order} uninitialised
 '''
 
-<textarea autofocus placeholder="Enter text here">
+<textarea autofocus id="input" placeholder="Enter text here">
 </textarea>
 
 '''

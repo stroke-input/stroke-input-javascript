@@ -15,6 +15,7 @@ let RANKING_PENALTY_CJK_EXTENSION = CJK_MAIN_CODE_POINT_END - CJK_EXTENSION_CODE
 let RANKING_PENALTY_PER_CHAR = 2 * CJK_EXTENSION_CODE_POINT_MAX;
 let RANKING_PENALTY_UNPREFERRED = 10 * CJK_EXTENSION_CODE_POINT_MAX;
 let MAX_PREFIX_MATCH_COUNT = 30;
+let MAX_PHRASE_LENGTH = 6;
 
 class Keyboardy
 {
@@ -398,7 +399,13 @@ class StrokeInputService
 
       if (!newStrokeDigitSequence)
       {
-        // TODO: phrase completion
+        let phrasePrefix = UserInterface.getTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+        let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(phrasePrefix);
+
+        this.candidates = phraseCompletionCandidates;
+        this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
+
+        UserInterface.updateCandidates(this.candidates);
       }
     }
     else
@@ -447,6 +454,11 @@ class StrokeInputService
     let candidates = [...exactMatchCandidates, ...prefixMatchCandidates];
     return candidates;
   }
+
+  async computePhraseCompletionCandidates(phrasePrefix)
+  {
+    return ["incomplete"]; // TODO
+  }
 }
 
 class UserInterface
@@ -482,6 +494,19 @@ class UserInterface
   {
     let candidatesText = candidates;
     document.getElementById("candidates").textContent = candidatesText;
+  }
+
+  static getTextBeforeCursor(targetLength)
+  {
+    let inputElement = document.getElementById("input");
+    if (document.activeElement !== inputElement)
+    {
+      return "";
+    }
+
+    let cursorPosition = inputElement.selectionStart;
+    let allTextBeforeCursor = inputElement.value.slice(0, cursorPosition);
+    return [...allTextBeforeCursor].slice(-targetLength).join("");
   }
 }
 
