@@ -555,6 +555,8 @@ class StrokeInputService
 
   async computePhraseCompletionCandidates(longestPhrasePrefix)
   {
+    await this._isLoaded;
+
     let phraseCompletionCandidates = [];
 
     for (
