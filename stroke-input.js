@@ -16,6 +16,7 @@ let RANKING_PENALTY_PER_CHAR = 2 * CJK_EXTENSION_CODE_POINT_MAX;
 let RANKING_PENALTY_UNPREFERRED = 10 * CJK_EXTENSION_CODE_POINT_MAX;
 let MAX_PREFIX_MATCH_COUNT = 30;
 let MAX_PHRASE_LENGTH = 6;
+let CANDIDATE_COUNT_PER_PAGE = 10;
 
 class Keyboardy
 {
@@ -337,6 +338,7 @@ class StrokeInputService
 
   strokeDigitSequence = "";
   candidates = [];
+  candidatesPageIndex = 0;
   phraseCompletionFirstCodePoints = [];
 
   constructor()
@@ -398,10 +400,11 @@ class StrokeInputService
     {
       this.strokeDigitSequence = newStrokeDigitSequence;
       this.candidates = newCandidates;
+      this.candidatesPageIndex = 0;
 
       UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-      UserInterface.updateCandidates(this.candidates);
+      UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
     }
   }
 
@@ -418,10 +421,11 @@ class StrokeInputService
 
       this.strokeDigitSequence = newStrokeDigitSequence;
       this.candidates = newCandidates;
+      this.candidatesPageIndex = 0;
 
       UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-      UserInterface.updateCandidates(this.candidates);
+      UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
 
       requirePhraseCandidatesUpdate = !newStrokeDigitSequence;
     }
@@ -462,9 +466,10 @@ class StrokeInputService
       let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
 
       this.candidates = phraseCompletionCandidates;
+      this.candidatesPageIndex = 0;
       this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
 
-      UserInterface.updateCandidates(this.candidates);
+      UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
     }
   }
 
@@ -501,9 +506,10 @@ class StrokeInputService
     let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
 
     this.candidates = phraseCompletionCandidates;
+    this.candidatesPageIndex = 0;
     this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
 
-    UserInterface.updateCandidates(this.candidates);
+    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
   }
 
   async computeCandidates(strokeDigitSequence)
@@ -610,10 +616,12 @@ class UserInterface
     document.getElementById("stroke-sequence").textContent = strokeSeqenceText;
   }
 
-  static updateCandidates(candidates) // TODO: pagination and separation
+  static updateCandidates(candidates, candidatesPageIndex)
   {
-    let candidatesText = candidates;
-    document.getElementById("candidates").textContent = candidatesText;
+    let startIndex = candidatesPageIndex * CANDIDATE_COUNT_PER_PAGE;
+    let endIndex = (candidatesPageIndex + 1) * CANDIDATE_COUNT_PER_PAGE;
+    let shownCandidates = candidates.slice(startIndex, endIndex);
+    document.getElementById("candidates").textContent = shownCandidates;
   }
 
   static getInputElement()
@@ -678,7 +686,7 @@ async function keyListener(event, strokeInputService)
 
     UserInterface.focusInputElement();
     UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
-    UserInterface.updateCandidates(strokeInputService.candidates);
+    UserInterface.updateCandidates(strokeInputService.candidates, strokeInputService.candidatesPageIndex);
     return;
   }
 
@@ -761,6 +769,7 @@ async function keyListener(event, strokeInputService)
   }
 
   // Candidate selection
+  console.assert(CANDIDATE_COUNT_PER_PAGE === 10);
   if (/^[0-9]$/.test(key) && !Keyboardy.isModified(event))
   {
     event.preventDefault();
