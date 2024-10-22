@@ -47,6 +47,24 @@ class Stringy
     return [...string].map(Stringy.getFirstCodePoint);
   }
 
+  static sunder(string, position)
+  {
+    return {
+      before: Stringy.keepLeadingCharacters(string, position),
+      after: Stringy.removeLeadingCharacters(string, position),
+    };
+  }
+
+  static keepLeadingCharacters(string, keptLength)
+  {
+    return [...string].slice(0, keptLength).join("");
+  }
+
+  static keepTrailingCharacters(string, keptLength)
+  {
+    return [...string].slice(-keptLength).join("");
+  }
+
   static removeLeadingCharacters(string, removedLength)
   {
     return [...string].slice(removedLength).join("");
@@ -542,12 +560,18 @@ class UserInterface
     return document.getElementById("input");
   }
 
-  static getInputTextBeforeCursor(targetLength)
+  static sunderInputTextAtCursor()
   {
     let inputElement = UserInterface.getInputElement();
+    let inputText = inputElement.value;
     let cursorPosition = inputElement.selectionStart;
-    let allTextBeforeCursor = inputElement.value.slice(0, cursorPosition);
-    return [...allTextBeforeCursor].slice(-targetLength).join("");
+    return Stringy.sunder(inputText, cursorPosition);
+  }
+
+  static getInputTextBeforeCursor(targetLength)
+  {
+    let textBeforeCursor = UserInterface.sunderInputTextAtCursor().before;
+    return Stringy.keepTrailingCharacters(textBeforeCursor, targetLength);
   }
 
   static isInputElementFocused()
