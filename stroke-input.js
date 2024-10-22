@@ -404,7 +404,7 @@ class StrokeInputService
 
       if (!newStrokeDigitSequence)
       {
-        let longestPhrasePrefix = UserInterface.getTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+        let longestPhrasePrefix = UserInterface.getInputTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
         let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
 
         this.candidates = phraseCompletionCandidates;
@@ -529,17 +529,23 @@ class UserInterface
     document.getElementById("candidates").textContent = candidatesText;
   }
 
-  static getTextBeforeCursor(targetLength)
+  static getInputElement()
   {
-    let inputElement = document.getElementById("input");
-    if (document.activeElement !== inputElement)
-    {
-      return "";
-    }
+    return document.getElementById("input");
+  }
 
+  static getInputTextBeforeCursor(targetLength)
+  {
+    let inputElement = UserInterface.getInputElement();
     let cursorPosition = inputElement.selectionStart;
     let allTextBeforeCursor = inputElement.value.slice(0, cursorPosition);
     return [...allTextBeforeCursor].slice(-targetLength).join("");
+  }
+
+  static focusInputElement()
+  {
+    let inputElement = UserInterface.getInputElement();
+    inputElement.focus();
   }
 }
 
