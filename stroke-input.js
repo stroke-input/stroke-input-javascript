@@ -384,6 +384,7 @@ class StrokeInputService
       this.strokeDigitSequence = newStrokeDigitSequence;
       this.candidates = newCandidates;
 
+      UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
       UserInterface.updateCandidates(this.candidates);
     }
@@ -399,6 +400,7 @@ class StrokeInputService
       this.strokeDigitSequence = newStrokeDigitSequence;
       this.candidates = newCandidates;
 
+      UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
       UserInterface.updateCandidates(this.candidates);
 
@@ -415,6 +417,12 @@ class StrokeInputService
     }
     else
     {
+      if (!UserInterface.isInputElementFocused())
+      {
+        UserInterface.focusInputElement();
+        return;
+      }
+
       // TODO: erasure plus phrase completion etc.
     }
   }
@@ -542,6 +550,12 @@ class UserInterface
     return [...allTextBeforeCursor].slice(-targetLength).join("");
   }
 
+  static isInputElementFocused()
+  {
+    let inputElement = UserInterface.getInputElement();
+    return document.activeElement === UserInterface.getInputElement();
+  }
+
   static focusInputElement()
   {
     let inputElement = UserInterface.getInputElement();
@@ -558,6 +572,7 @@ async function keyListener(event, strokeInputService)
   {
     event.preventDefault();
     strokeInputService.isEnabled = !strokeInputService.isEnabled;
+    UserInterface.focusInputElement();
     UserInterface.updateEnabledStatus(strokeInputService.isEnabled);
     return;
   }
@@ -570,6 +585,7 @@ async function keyListener(event, strokeInputService)
     strokeInputService.updateCandidateOrderPreference();
     strokeInputService.candidates = await strokeInputService.computeCandidates(strokeInputService.strokeDigitSequence);
 
+    UserInterface.focusInputElement();
     UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
     UserInterface.updateCandidates(strokeInputService.candidates);
     return;
