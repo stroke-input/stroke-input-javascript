@@ -466,6 +466,42 @@ class StrokeInputService
     }
   }
 
+  async effectDelete()
+  {
+    if (this.strokeDigitSequence || !UserInterface.isInputElementFocused())
+    {
+      UserInterface.focusInputElement();
+      return;
+    }
+
+    let inputElement = UserInterface.getInputElement();
+    let sunderedInputText = UserInterface.sunderInputText();
+    let textBeforeCursor = sunderedInputText.before;
+    let textSelection = sunderedInputText.selection;
+    let textAfterCursor = sunderedInputText.after;
+
+    if (textSelection)
+    {
+      inputElement.value = textBeforeCursor + textAfterCursor;
+    }
+    else
+    {
+      let newTextAfterCursor = Stringy.removeLeadingCharacters(textAfterCursor, 1);
+      inputElement.value = textBeforeCursor + newTextAfterCursor;
+    }
+
+    let newCursorPosition = textBeforeCursor.length;
+    inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+
+    let longestPhrasePrefix = UserInterface.getInputTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+    let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
+
+    this.candidates = phraseCompletionCandidates;
+    this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
+
+    UserInterface.updateCandidates(this.candidates);
+  }
+
   async computeCandidates(strokeDigitSequence)
   {
     await this._isLoaded;
@@ -700,7 +736,7 @@ async function keyListener(event, strokeInputService)
   if (key === "Delete")
   {
     event.preventDefault();
-    console.log("DELETE"); // TODO: logic for ctrlKey, strokes, selection
+    strokeInputService.effectDelete();
     return;
   }
 
