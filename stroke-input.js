@@ -407,6 +407,8 @@ class StrokeInputService
 
   async effectBackspace()
   {
+    await this._isLoaded;
+
     let requirePhraseCandidatesUpdate;
 
     if (this.strokeDigitSequence)
@@ -468,6 +470,8 @@ class StrokeInputService
 
   async effectDelete()
   {
+    await this._isLoaded;
+
     if (this.strokeDigitSequence || !UserInterface.isInputElementFocused())
     {
       UserInterface.focusInputElement();
