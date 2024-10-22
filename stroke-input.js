@@ -47,14 +47,6 @@ class Stringy
     return [...string].map(Stringy.getFirstCodePoint);
   }
 
-  static sunder(string, position)
-  {
-    return {
-      before: Stringy.keepLeadingCharacters(string, position),
-      after: Stringy.removeLeadingCharacters(string, position),
-    };
-  }
-
   static keepLeadingCharacters(string, keptLength)
   {
     return [...string].slice(0, keptLength).join("");
@@ -63,6 +55,11 @@ class Stringy
   static keepTrailingCharacters(string, keptLength)
   {
     return [...string].slice(-keptLength).join("");
+  }
+
+  static extractCharacters(string, startPosition, endPosition)
+  {
+    return [...string].slice(startPosition, endPosition).join("");
   }
 
   static removeLeadingCharacters(string, removedLength)
@@ -441,7 +438,27 @@ class StrokeInputService
         return;
       }
 
-      // TODO: erasure plus phrase completion etc.
+      let inputElement = UserInterface.getInputElement();
+      let sunderedInputText = UserInterface.sunderInputText();
+      let textBeforeCursor = sunderedInputText.before;
+      let textSelection = sunderedInputText.selection;
+      let textAfterCursor = sunderedInputText.after;
+
+      if (textSelection)
+      {
+        let newCursorPosition = textBeforeCursor.length;
+        inputElement.value = textBeforeCursor + textAfterCursor;
+        inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+      }
+      else
+      {
+        let newTextBeforeCursor = Stringy.removeTrailingCharacters(textBeforeCursor, 1);
+        let newCursorPosition = newTextBeforeCursor.length;
+        inputElement.value = newTextBeforeCursor + textAfterCursor;
+        inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+      }
+
+      // TODO: phrase completion
     }
   }
 
@@ -560,17 +577,23 @@ class UserInterface
     return document.getElementById("input");
   }
 
-  static sunderInputTextAtCursor()
+  static sunderInputText()
   {
     let inputElement = UserInterface.getInputElement();
     let inputText = inputElement.value;
-    let cursorPosition = inputElement.selectionStart;
-    return Stringy.sunder(inputText, cursorPosition);
+    let selectionStart = inputElement.selectionStart;
+    let selectionEnd = inputElement.selectionEnd;
+
+    return {
+      before: Stringy.keepLeadingCharacters(inputText, selectionStart),
+      selection: Stringy.extractCharacters(inputText, selectionStart, selectionEnd),
+      after: Stringy.removeLeadingCharacters(inputText, selectionEnd),
+    };
   }
 
   static getInputTextBeforeCursor(targetLength)
   {
-    let textBeforeCursor = UserInterface.sunderInputTextAtCursor().before;
+    let textBeforeCursor = UserInterface.sunderInputText().before;
     return Stringy.keepTrailingCharacters(textBeforeCursor, targetLength);
   }
 
