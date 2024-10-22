@@ -47,14 +47,14 @@ class Stringy
     return [...string].map(Stringy.getFirstCodePoint);
   }
 
-  static removeLeadingCharacters(string, removalLength)
+  static removeLeadingCharacters(string, removedLength)
   {
-    return [...string].slice(removalLength).join("");
+    return [...string].slice(removedLength).join("");
   }
 
-  static removeTrailingCharacters(string, removalLength)
+  static removeTrailingCharacters(string, removedLength)
   {
-    return [...string].slice(0, -removalLength).join("");
+    return [...string].slice(0, -removedLength).join("");
   }
 }
 
