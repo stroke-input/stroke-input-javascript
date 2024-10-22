@@ -407,6 +407,8 @@ class StrokeInputService
 
   async effectBackspace()
   {
+    let requirePhraseCandidatesUpdate;
+
     if (this.strokeDigitSequence)
     {
       let newStrokeDigitSequence = Stringy.removeTrailingCharacters(this.strokeDigitSequence, 1);
@@ -419,16 +421,7 @@ class StrokeInputService
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
       UserInterface.updateCandidates(this.candidates);
 
-      if (!newStrokeDigitSequence)
-      {
-        let longestPhrasePrefix = UserInterface.getInputTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
-        let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
-
-        this.candidates = phraseCompletionCandidates;
-        this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
-
-        UserInterface.updateCandidates(this.candidates);
-      }
+      requirePhraseCandidatesUpdate = !newStrokeDigitSequence;
     }
     else
     {
@@ -458,7 +451,18 @@ class StrokeInputService
         inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
       }
 
-      // TODO: phrase completion
+      requirePhraseCandidatesUpdate = true;
+    }
+
+    if (requirePhraseCandidatesUpdate)
+    {
+      let longestPhrasePrefix = UserInterface.getInputTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+      let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
+
+      this.candidates = phraseCompletionCandidates;
+      this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
+
+      UserInterface.updateCandidates(this.candidates);
     }
   }
 
