@@ -512,6 +512,15 @@ class StrokeInputService
     UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
   }
 
+  async onCandidatesLastPage()
+  {
+    await this._isLoaded;
+
+    this.candidatesPageIndex = await this.getCandidatesLastPageIndex();
+
+    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+  }
+
   async computeCandidates(strokeDigitSequence)
   {
     await this._isLoaded;
@@ -586,6 +595,13 @@ class StrokeInputService
     }
 
     return phraseCompletionCandidates;
+  }
+
+  async getCandidatesLastPageIndex()
+  {
+    await this._isLoaded;
+
+    return Math.floor((this.candidates.length - 1) / CANDIDATE_COUNT_PER_PAGE);
   }
 }
 
@@ -808,7 +824,7 @@ async function keyListener(event, strokeInputService)
   if (key === "End" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
-    console.log("CANDIDATES_PAGE_LAST"); // TODO: logic
+    strokeInputService.onCandidatesLastPage();
     return;
   }
 
