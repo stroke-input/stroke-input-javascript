@@ -47,6 +47,11 @@ class Stringy
     return [...string].map(Stringy.getFirstCodePoint);
   }
 
+  static removeLeadingCharacters(string, length)
+  {
+    return [...string].slice(length).join("");
+  }
+
   static removeLastCharacter(string)
   {
     return [...string].slice(0, -1).join("");
@@ -278,16 +283,16 @@ class Loader
     return [sortingRankFromCodePoint, commonCodePoints];
   }
 
-  static async toPhraseSet(phrasesFileName)
+  static async toPhraseList(phrasesFileName)
   {
     let phrasesText = await fetch(phrasesFileName).then(response => response.text());
 
-    let phrases = new Set();
+    let phrases = [];
     for (const line of phrasesText.split("\n"))
     {
       if (!Loader.isCommentLine(line))
       {
-        phrases.add(line);
+        phrases.push(line);
       }
     }
 
@@ -331,8 +336,8 @@ class StrokeInputService
     this.codePointsSimplified = await Loader.toCharactersCodePointSet(CHARACTERS_FILE_NAME_SIMPLIFIED);
     [this.sortingRankFromCodePointTraditional, this.commonCodePointsTraditional] = await Loader.toRankingData(RANKING_FILE_NAME_TRADITIONAL);
     [this.sortingRankFromCodePointSimplified, this.commonCodePointsSimplified] = await Loader.toRankingData(RANKING_FILE_NAME_SIMPLIFIED);
-    this.phrasesTraditional = await Loader.toPhraseSet(PHRASES_FILE_NAME_TRADITIONAL);
-    this.phrasesSimplified = await Loader.toPhraseSet(PHRASES_FILE_NAME_SIMPLIFIED);
+    this.phrasesTraditional = await Loader.toPhraseList(PHRASES_FILE_NAME_TRADITIONAL);
+    this.phrasesSimplified = await Loader.toPhraseList(PHRASES_FILE_NAME_SIMPLIFIED);
   }
 
   async initialise()
@@ -399,8 +404,8 @@ class StrokeInputService
 
       if (!newStrokeDigitSequence)
       {
-        let phrasePrefix = UserInterface.getTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
-        let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(phrasePrefix);
+        let longestPhrasePrefix = UserInterface.getTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+        let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
 
         this.candidates = phraseCompletionCandidates;
         this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
@@ -455,9 +460,37 @@ class StrokeInputService
     return candidates;
   }
 
-  async computePhraseCompletionCandidates(phrasePrefix)
+  async computePhraseCompletionCandidates(longestPhrasePrefix)
   {
-    return ["incomplete"]; // TODO
+    let phraseCompletionCandidates = [];
+
+    for (
+      let phrasePrefix = longestPhrasePrefix;
+      phrasePrefix;
+      phrasePrefix = Stringy.removeLeadingCharacters(phrasePrefix, 1)
+    )
+    {
+      let prefixMatchPhraseCandidates = this.phrases.filter(phrase => phrase.startsWith(phrasePrefix) && phrase !== phrasePrefix);
+      let prefixMatchPhraseCompletions = [];
+      let phrasePrefixLength = Stringy.getLength(phrasePrefix);
+
+      for (const phraseCandidate of prefixMatchPhraseCandidates)
+      {
+        let phraseCompletion = Stringy.removeLeadingCharacters(phraseCandidate, phrasePrefixLength);
+        if (!phraseCompletionCandidates.includes(phraseCompletion))
+        {
+          prefixMatchPhraseCompletions.push(phraseCompletion);
+        }
+
+        prefixMatchPhraseCompletions.sort(
+          Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, [])
+        );
+      }
+
+      phraseCompletionCandidates.push(...prefixMatchPhraseCompletions);
+    }
+
+    return phraseCompletionCandidates;
   }
 }
 
