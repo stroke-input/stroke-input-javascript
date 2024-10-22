@@ -47,14 +47,14 @@ class Stringy
     return [...string].map(Stringy.getFirstCodePoint);
   }
 
-  static removeLeadingCharacters(string, length)
+  static removeLeadingCharacters(string, removalLength)
   {
-    return [...string].slice(length).join("");
+    return [...string].slice(removalLength).join("");
   }
 
-  static removeLastCharacter(string)
+  static removeTrailingCharacters(string, removalLength)
   {
-    return [...string].slice(0, -1).join("");
+    return [...string].slice(0, -removalLength).join("");
   }
 }
 
@@ -393,7 +393,7 @@ class StrokeInputService
   {
     if (this.strokeDigitSequence)
     {
-      let newStrokeDigitSequence = Stringy.removeLastCharacter(this.strokeDigitSequence);
+      let newStrokeDigitSequence = Stringy.removeTrailingCharacters(this.strokeDigitSequence, 1);
       let newCandidates = await this.computeCandidates(newStrokeDigitSequence);
 
       this.strokeDigitSequence = newStrokeDigitSequence;
