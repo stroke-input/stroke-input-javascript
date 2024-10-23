@@ -547,6 +547,33 @@ class StrokeInputService
     }
   }
 
+  async effectEnterKey()
+  {
+    await this._isLoaded;
+
+    if (!UserInterface.isInputElementFocused())
+    {
+      UserInterface.focusInputElement();
+      return;
+    }
+
+    if (this.strokeDigitSequence)
+    {
+      this.onCandidate(0);
+    }
+    else
+    {
+      let inputElement = UserInterface.getInputElement();
+      let sunderedInputText = UserInterface.sunderInputText();
+      let textBeforeCursor = sunderedInputText.before;
+      let textAfterCursor = sunderedInputText.after;
+      inputElement.value = textBeforeCursor + "\n" + textAfterCursor;
+
+      let newCursorPosition = textBeforeCursor.length + 1;
+      inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+  }
+
   async onCandidate(index)
   {
     await this._isLoaded;
@@ -891,7 +918,7 @@ async function keyListener(event, strokeInputService)
   if (key === "Enter")
   {
     event.preventDefault();
-    console.log("ENTER"); // TODO: logic for strokes, selection
+    strokeInputService.effectEnterKey();
     return;
   }
 
