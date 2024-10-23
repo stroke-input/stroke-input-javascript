@@ -838,7 +838,7 @@ async function keyListener(event, strokeInputService)
   }
 
   // Candidates previous page
-  if (["PageUp", "ArrowUp", "ArrowLeft"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  if (["PageUp", "ArrowUp"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("CANDIDATES_PAGE_PREVIOUS"); // TODO: logic
@@ -846,7 +846,7 @@ async function keyListener(event, strokeInputService)
   }
 
   // Candidates next page
-  if (["PageDown", "ArrowDown", "ArrowRight"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  if (["PageDown", "ArrowDown"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
     console.log("CANDIDATES_PAGE_NEXT"); // TODO: logic
