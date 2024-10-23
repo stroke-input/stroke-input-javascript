@@ -520,6 +520,45 @@ class StrokeInputService
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
+  async onCandidate(index)
+  {
+    await this._isLoaded;
+
+    if (!UserInterface.isInputElementFocused())
+    {
+      UserInterface.focusInputElement();
+      return;
+    }
+
+    let shownCandidates = await this.getShownCandidates();
+    if (index >= shownCandidates.length)
+    {
+      return;
+    }
+
+    let candidate = shownCandidates.at(index);
+    let inputElement = UserInterface.getInputElement();
+    let sunderedInputText = UserInterface.sunderInputText();
+    let textBeforeCursor = sunderedInputText.before;
+    let textAfterCursor = sunderedInputText.after;
+    inputElement.value = textBeforeCursor + candidate + textAfterCursor;
+
+    let newCursorPosition = (textBeforeCursor + candidate).length;
+    inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+
+    this.strokeDigitSequence = "";
+
+    let longestPhrasePrefix = UserInterface.getInputTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+    let phraseCompletionCandidates = await this.computePhraseCompletionCandidates(longestPhrasePrefix);
+
+    this.candidates = phraseCompletionCandidates;
+    this.candidatesPageIndex = 0;
+    this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
+
+    UserInterface.updateStrokeSequence(this.strokeDigitSequence);
+    UserInterface.updateCandidates(await this.getShownCandidates());
+  }
+
   async onCandidatesFirstPage()
   {
     await this._isLoaded;
@@ -835,8 +874,8 @@ async function keyListener(event, strokeInputService)
   if (/^[0-9]$/.test(key) && !Keyboardy.isModified(event))
   {
     event.preventDefault();
-    let candidate_index = (+(key) + 9) % 10;
-    console.log(`DISPLAYED_CANDIDATE_${candidate_index}`); // TODO: logic
+    let index = (+(key) + 9) % 10;
+    strokeInputService.onCandidate(index);
     return;
   }
 
