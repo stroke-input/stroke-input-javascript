@@ -1,0 +1,18 @@
+:root{
+  --key-fill: #181818;
+}
+
+body {
+  background: black;
+  color: white;
+  font-family: sans-serif;
+  margin: 0;
+  overflow-wrap: break-word;
+  padding: 1em;
+}
+
+html {
+  background: var(--key-fill);
+  margin: 0 auto;
+  max-width: 44em;
+}
