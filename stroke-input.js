@@ -512,6 +512,15 @@ class StrokeInputService
     UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
   }
 
+  async onCandidatesFirstPage()
+  {
+    await this._isLoaded;
+
+    this.candidatesPageIndex = 0;
+
+    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+  }
+
   async onCandidatesLastPage()
   {
     await this._isLoaded;
@@ -816,7 +825,7 @@ async function keyListener(event, strokeInputService)
   if (key === "Home" && !Keyboardy.isModified(event))
   {
     event.preventDefault();
-    console.log("CANDIDATES_PAGE_FIRST"); // TODO: logic
+    strokeInputService.onCandidatesFirstPage();
     return;
   }
 
