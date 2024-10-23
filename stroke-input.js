@@ -30,6 +30,20 @@ let ORDINARY_PUNCTUATION_CHARACTER_FROM_KEY = new Map([
   [":", "："], // U+FF1A FULLWIDTH COLON
   ["~", "〜"], // U+301C WAVE DASH
 ]);
+let SPECIAL_SYMBOLS_FROM_KEY = new Map([
+  [`'`, `「」‘’`], // U+300C, U+300D, U+2018, U+2019
+  [`"`, `『』“”`], // U+300E, U+300F, U+201C, U+201D
+  ["[", "【〖〔"], // U+3010, U+3016, U+3014
+  ["]", "】〗〕"], // U+3011, U+3017, U+3015
+  ["<", "〈《"], // U+3008, U+300A
+  [">", "〉》"], // U+3009, U+300B
+  ["|", "·・"], // U+00B7, U+30FB
+  ["`", "…　々"], // U+2026, U+3000, U+3005
+  ["$", "\u302a\u302b\u302c\u302d"], // Four ideographic tone marks: U+302A to U+302D
+  ["*", "꜀꜁꜂꜃꜄꜅꜆꜇"], // Eight modifier tone letters: U+A700 to U+A707
+  ["%", "˥˦˧˨˩"], // Five tone letters: U+02E5 to U+02E9
+  ["=", "⿰⿱⿲⿳⿴⿵⿶⿷⿸⿹⿺⿻"], // Ideographic description characters: U+2FF0 to U+2FFB
+])
 
 class Keyboardy
 {
@@ -651,6 +665,28 @@ class StrokeInputService
     inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
   }
 
+  async effectSpecialSymbolKey(specialSymbols)
+  {
+    await this._isLoaded;
+
+    if (!UserInterface.isInputElementFocused())
+    {
+      UserInterface.focusInputElement();
+      return;
+    }
+
+    if (this.strokeDigitSequence)
+    {
+      return;
+    }
+
+    this.candidates = [...specialSymbols];
+    this.candidatesPageIndex = 0;
+    this.phraseCompletionFirstCodePoints = [];
+
+    UserInterface.updateCandidates(await this.getShownCandidates());
+  }
+
   async onCandidatesFirstPage()
   {
     await this._isLoaded;
@@ -979,11 +1015,12 @@ async function keyListener(event, strokeInputService)
     return;
   }
 
-  // Symbol classes
-  if (/^['"\[\]{}<>|`$*%=]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  // Special symbol classes
+  if (SPECIAL_SYMBOLS_FROM_KEY.has(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log(`SYMBOL_CLASS_${key}`); // TODO
+    let specialSymbols = SPECIAL_SYMBOLS_FROM_KEY.get(key);
+    strokeInputService.effectSpecialSymbolKey(specialSymbols);
     return;
   }
 
