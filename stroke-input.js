@@ -845,9 +845,10 @@ class UserInterface
 
   static updateEnabledStatus(isEnabled)
   {
-    let enabledStatusElement = document.getElementById("enabled-status");
     let enabledStatusClass = isEnabled ? "enabled" : "disabled";
     let enabledStatusText = isEnabled ? "Enabled" : "Disabled";
+
+    let enabledStatusElement = document.getElementById("enabled-status");
     enabledStatusElement.className = enabledStatusClass;
     enabledStatusElement.textContent = enabledStatusText;
   }
@@ -867,8 +868,18 @@ class UserInterface
 
   static updateStrokeSequence(strokeDigitSequence)
   {
-    let strokeSeqenceText = strokeDigitSequence; // TODO: actual stroke characters
-    document.getElementById("stroke-sequence").textContent = strokeSeqenceText;
+    let strokesMap = new Map([
+      ["1", "㇐"], // U+31D0 CJK STROKE H
+      ["2", "㇑"], // U+31D1 CJK STROKE S
+      ["3", "㇒"], // U+31D2 CJK STROKE P
+      ["4", "㇔"], // U+31D4 CJK STROKE D
+      ["5", "㇖"], // U+31D6 CJK STROKE HG
+    ]);
+    let strokeSeqenceText = strokeDigitSequence.replace(/./g, stroke => strokesMap.get(stroke));
+
+    let strokeSequenceElement = document.getElementById("stroke-sequence");
+    strokeSequenceElement.textContent = strokeSeqenceText;
+    strokeSequenceElement.title = strokeDigitSequence;
   }
 
   static updateCandidates(shownCandidates)
@@ -878,7 +889,7 @@ class UserInterface
       ["\u302b", "上〫"],
       ["\u302c", "去〬"],
       ["\u302d", "入〭"],
-    ])
+    ]);
     let readableShownCandidates = [...shownCandidates].map(candidate => readabilityMap.get(candidate) || candidate);
     let newInnerHtml =
             readableShownCandidates
