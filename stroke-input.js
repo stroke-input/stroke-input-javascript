@@ -520,6 +520,33 @@ class StrokeInputService
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
+  async effectSpaceKey()
+  {
+    await this._isLoaded;
+
+    if (!UserInterface.isInputElementFocused())
+    {
+      UserInterface.focusInputElement();
+      return;
+    }
+
+    if (this.strokeDigitSequence)
+    {
+      this.onCandidate(0);
+    }
+    else
+    {
+      let inputElement = UserInterface.getInputElement();
+      let sunderedInputText = UserInterface.sunderInputText();
+      let textBeforeCursor = sunderedInputText.before;
+      let textAfterCursor = sunderedInputText.after;
+      inputElement.value = textBeforeCursor + " " + textAfterCursor;
+
+      let newCursorPosition = textBeforeCursor.length + 1;
+      inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+  }
+
   async onCandidate(index)
   {
     await this._isLoaded;
@@ -856,7 +883,7 @@ async function keyListener(event, strokeInputService)
   if (key === " " && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("SPACE"); // TODO: logic for ctrlKey, strokes, selection
+    strokeInputService.effectSpaceKey();
     return;
   }
 
