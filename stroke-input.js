@@ -367,6 +367,7 @@ class StrokeInputService
   candidates = [];
   candidatesPageIndex = 0;
   phraseCompletionFirstCodePoints = [];
+  isInSpecialSymbolState = false;
 
   constructor()
   {
@@ -425,6 +426,8 @@ class StrokeInputService
 
     UserInterface.focusInputElement();
 
+    this.isInSpecialSymbolState = false;
+
     let newStrokeDigitSequence = this.strokeDigitSequence + strokeDigit;
     let newCandidates = await this.computeCandidates(newStrokeDigitSequence);
     if (newCandidates.length)
@@ -473,7 +476,11 @@ class StrokeInputService
       let textSelection = sunderedInputText.selection;
       let textAfterCursor = sunderedInputText.after;
 
-      if (textSelection)
+      if (this.isInSpecialSymbolState)
+      {
+        this.isInSpecialSymbolState = false;
+      }
+      else if (textSelection)
       {
         let newCursorPosition = textBeforeCursor.length;
         inputElement.value = textBeforeCursor + textAfterCursor;
@@ -513,7 +520,7 @@ class StrokeInputService
       return;
     }
 
-    if (this.strokeDigitSequence)
+    if (this.strokeDigitSequence || this.isInSpecialSymbolState)
     {
       return;
     }
@@ -557,8 +564,9 @@ class StrokeInputService
       return;
     }
 
-    if (this.strokeDigitSequence)
+    if (this.strokeDigitSequence || this.isInSpecialSymbolState)
     {
+      this.isInSpecialSymbolState = false;
       this.effectCandidateKey(0);
     }
     else
@@ -584,8 +592,9 @@ class StrokeInputService
       return;
     }
 
-    if (this.strokeDigitSequence)
+    if (this.strokeDigitSequence || this.isInSpecialSymbolState)
     {
+      this.isInSpecialSymbolState = false;
       this.effectCandidateKey(0);
     }
     else
@@ -635,6 +644,7 @@ class StrokeInputService
     this.candidates = phraseCompletionCandidates;
     this.candidatesPageIndex = 0;
     this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
+    this.isInSpecialSymbolState = false;
 
     UserInterface.updateStrokeSequence(this.strokeDigitSequence);
     UserInterface.updateCandidates(await this.getShownCandidates());
@@ -663,6 +673,8 @@ class StrokeInputService
 
     let newCursorPosition = (textBeforeCursor + punctuationCharacter).length;
     inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+
+    this.isInSpecialSymbolState = false;
   }
 
   async effectSpecialSymbolKey(specialSymbols)
@@ -683,6 +695,7 @@ class StrokeInputService
     this.candidates = [...specialSymbols];
     this.candidatesPageIndex = 0;
     this.phraseCompletionFirstCodePoints = [];
+    this.isInSpecialSymbolState = true;
 
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
@@ -910,7 +923,10 @@ async function keyListener(event, strokeInputService)
     event.preventDefault();
     strokeInputService.isTraditionalPreferred = !strokeInputService.isTraditionalPreferred;
     strokeInputService.updateCandidateOrderPreference();
-    strokeInputService.candidates = await strokeInputService.computeCandidates(strokeInputService.strokeDigitSequence);
+    if (!strokeInputService.isInSpecialSymbolState)
+    {
+      strokeInputService.candidates = await strokeInputService.computeCandidates(strokeInputService.strokeDigitSequence);
+    }
 
     UserInterface.focusInputElement();
     UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
