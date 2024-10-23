@@ -667,7 +667,7 @@ class StrokeInputService
       }
 
       prefixMatchPhraseCompletions.sort(
-        Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, [])
+        Comparer.candidateComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, [])
       );
       phraseCompletionCandidates.push(...prefixMatchPhraseCompletions);
     }
