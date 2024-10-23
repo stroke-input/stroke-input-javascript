@@ -532,7 +532,7 @@ class StrokeInputService
 
     if (this.strokeDigitSequence)
     {
-      this.onCandidate(0);
+      this.effectCandidateKey(0);
     }
     else
     {
@@ -559,7 +559,7 @@ class StrokeInputService
 
     if (this.strokeDigitSequence)
     {
-      this.onCandidate(0);
+      this.effectCandidateKey(0);
     }
     else
     {
@@ -574,7 +574,7 @@ class StrokeInputService
     }
   }
 
-  async onCandidate(index)
+  async effectCandidateKey(index)
   {
     await this._isLoaded;
 
@@ -928,7 +928,7 @@ async function keyListener(event, strokeInputService)
   {
     event.preventDefault();
     let index = (+(key) + 9) % 10;
-    strokeInputService.onCandidate(index);
+    strokeInputService.effectCandidateKey(index);
     return;
   }
 
