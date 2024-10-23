@@ -35,7 +35,7 @@ FixedDelimitersReplacement: #.keyboard-element
 
 '''
 //
-  ; Stroke input
+  ; Stroke input status
   ,{#enabled-status} Uninitialised
 //
   ; Candidate order
