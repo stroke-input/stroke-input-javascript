@@ -869,7 +869,11 @@ class UserInterface
       ["\u302d", "入〭"],
     ])
     let readableShownCandidates = [...shownCandidates].map(candidate => readabilityMap.get(candidate) || candidate);
-    document.getElementById("candidates").textContent = readableShownCandidates;
+    let newInnerHtml =
+            readableShownCandidates
+            .map((candidate, index) => `<kbd>${(index + 1) % 10}</kbd>: ${candidate}`)
+            .join("<br>");
+    document.getElementById("candidates").innerHTML = newInnerHtml;
   }
 
   static getInputElement()
