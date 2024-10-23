@@ -862,7 +862,14 @@ class UserInterface
 
   static updateCandidates(shownCandidates)
   {
-    document.getElementById("candidates").textContent = shownCandidates;
+    let readabilityMap = new Map([
+      ["\u302a", "平〪"],
+      ["\u302b", "上〫"],
+      ["\u302c", "去〬"],
+      ["\u302d", "入〭"],
+    ])
+    let readableShownCandidates = [...shownCandidates].map(candidate => readabilityMap.get(candidate) || candidate);
+    document.getElementById("candidates").textContent = readableShownCandidates;
   }
 
   static getInputElement()
