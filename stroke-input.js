@@ -18,6 +18,19 @@ let MAX_PREFIX_MATCH_COUNT = 30;
 let MAX_PHRASE_LENGTH = 6;
 let CANDIDATE_COUNT_PER_PAGE = 10;
 
+let CHARACTER_FROM_ORDINARY_PUNCTUATION = new Map([
+  [";", "；"], // U+FF1B FULLWIDTH SEMICOLON
+  ["\\", "、"], // U+3001 IDEOGRAPHIC COMMA
+  ["?", "？"], // U+FF1F FULLWIDTH QUESTION MARK
+  ["!", "！"], // U+FF01 FULLWIDTH EXCLAMATION MARK
+  [",", "，"], // U+FF0C FULLWIDTH COMMA
+  [".", "。"], // U+3002 IDEOGRAPHIC FULL STOP
+  ["(", "（"], // U+FF08 FULLWIDTH LEFT PARENTHESIS
+  [")", "）"], // U+FF09 FULLWIDTH RIGHT PARENTHESIS
+  [":", "："], // U+FF1A FULLWIDTH COLON
+  ["~", "〜"], // U+301C WAVE DASH
+]);
+
 class Keyboardy
 {
   static isModified(event)
@@ -613,6 +626,31 @@ class StrokeInputService
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
+  async effectOrdinaryPunctuationKey(punctuationCharacter)
+  {
+    await this._isLoaded;
+
+    if (!UserInterface.isInputElementFocused())
+    {
+      UserInterface.focusInputElement();
+      return;
+    }
+
+    if (this.strokeDigitSequence)
+    {
+      return;
+    }
+
+    let inputElement = UserInterface.getInputElement();
+    let sunderedInputText = UserInterface.sunderInputText();
+    let textBeforeCursor = sunderedInputText.before;
+    let textAfterCursor = sunderedInputText.after;
+    inputElement.value = textBeforeCursor + punctuationCharacter + textAfterCursor;
+
+    let newCursorPosition = (textBeforeCursor + punctuationCharacter).length;
+    inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+  }
+
   async onCandidatesFirstPage()
   {
     await this._isLoaded;
@@ -933,10 +971,11 @@ async function keyListener(event, strokeInputService)
   }
 
   // Ordinary punctuation
-  if (/^[;\\?!,.():~]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  if (CHARACTER_FROM_ORDINARY_PUNCTUATION.has(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log(`ORDINARY_PUNCTUATION_${key}`); // TODO
+    let punctuationCharacter = CHARACTER_FROM_ORDINARY_PUNCTUATION.get(key);
+    strokeInputService.effectOrdinaryPunctuationKey(punctuationCharacter);
     return;
   }
 
