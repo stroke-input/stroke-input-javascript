@@ -13,6 +13,13 @@ RegexDictionaryReplacement: #.chinese-lang
     -->
   <span lang="zh-Hant">\g<chinese_run></span>
 
+FixedDelimitersReplacement: #.keyboard-element
+- queue_position: AFTER #inline-semantics
+- syntax_type: INLINE
+- opening_delimiter: [
+- closing_delimiter: ]
+- tag_name: kbd
+
 %%%
 
 # %title
@@ -47,3 +54,46 @@ RegexDictionaryReplacement: #.chinese-lang
 '''
 
 ||||
+
+
+## Controls
+
+''''
+|^
+  //
+    ; Function
+    ; Key
+|:
+  //
+    , Toggle stroke input
+    , [F2]
+  //
+    , Toggle candidate order
+    , [F9]
+  //
+    , Type strokes
+    , [U][I][O][J][K] (or [H][S][P][D][Z])
+  //
+    , Select candidate
+    , [1][2][3][4][5][6][7][8][9][0]
+  //
+    , Type ordinary punctuation
+    , [;][\\][?][!][,][.][(][)][:][~]
+  //
+    , Type special symbol classes
+    , [']["][\[][\]][{][}][<][>][|][`][$][*][%][=]
+  //
+    , Scroll candidates
+    , [↑][↓] (or [PgUp][PgDn]) and ([Home][End])
+''''
+
+
+## TODO list
+
+++++
+1. Implement better visuals for stroke sequence and candidates
+1. Actual styling (CSS)
+1. Make this a submodule (aliased as `javascript`) of `stroke-input.github.io`
+1. Add keyboard image with callouts for visual presentation of controls
+1. Serve stroke input font for nice stroke characters
+++++
