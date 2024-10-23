@@ -404,7 +404,7 @@ class StrokeInputService
 
       UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-      UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+      UserInterface.updateCandidates(await this.getShownCandidates());
     }
   }
 
@@ -425,7 +425,7 @@ class StrokeInputService
 
       UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-      UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+      UserInterface.updateCandidates(await this.getShownCandidates());
 
       requirePhraseCandidatesUpdate = !newStrokeDigitSequence;
     }
@@ -469,7 +469,7 @@ class StrokeInputService
       this.candidatesPageIndex = 0;
       this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
 
-      UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+      UserInterface.updateCandidates(await this.getShownCandidates());
     }
   }
 
@@ -509,7 +509,7 @@ class StrokeInputService
     this.candidatesPageIndex = 0;
     this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
 
-    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+    UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
   async onCandidatesFirstPage()
@@ -518,7 +518,7 @@ class StrokeInputService
 
     this.candidatesPageIndex = 0;
 
-    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+    UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
   async onCandidatesLastPage()
@@ -527,7 +527,7 @@ class StrokeInputService
 
     this.candidatesPageIndex = await this.getCandidatesLastPageIndex();
 
-    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+    UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
   async onCandidatesPreviousPage()
@@ -536,7 +536,7 @@ class StrokeInputService
 
     this.candidatesPageIndex = Math.max(0, this.candidatesPageIndex - 1);
 
-    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+    UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
   async onCandidatesNextPage()
@@ -546,7 +546,7 @@ class StrokeInputService
     let lastPageIndex = await this.getCandidatesLastPageIndex();
     this.candidatesPageIndex = Math.min(lastPageIndex, this.candidatesPageIndex + 1);
 
-    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+    UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
   async computeCandidates(strokeDigitSequence)
@@ -631,6 +631,13 @@ class StrokeInputService
 
     return Math.floor((this.candidates.length - 1) / CANDIDATE_COUNT_PER_PAGE);
   }
+
+  async getShownCandidates()
+  {
+    let startIndex = this.candidatesPageIndex * CANDIDATE_COUNT_PER_PAGE;
+    let endIndex = (this.candidatesPageIndex + 1) * CANDIDATE_COUNT_PER_PAGE;
+    return this.candidates.slice(startIndex, endIndex);
+  }
 }
 
 class UserInterface
@@ -662,11 +669,8 @@ class UserInterface
     document.getElementById("stroke-sequence").textContent = strokeSeqenceText;
   }
 
-  static updateCandidates(candidates, candidatesPageIndex)
+  static updateCandidates(shownCandidates)
   {
-    let startIndex = candidatesPageIndex * CANDIDATE_COUNT_PER_PAGE;
-    let endIndex = (candidatesPageIndex + 1) * CANDIDATE_COUNT_PER_PAGE;
-    let shownCandidates = candidates.slice(startIndex, endIndex);
     document.getElementById("candidates").textContent = shownCandidates;
   }
 
