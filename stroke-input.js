@@ -845,7 +845,7 @@ class UserInterface
 
   static updateEnabledStatus(isEnabled)
   {
-    let enabledStatusText = isEnabled ? "enabled" : "disabled";
+    let enabledStatusText = isEnabled ? "Enabled" : "Disabled";
     document.getElementById("enabled-status").textContent = enabledStatusText;
   }
 

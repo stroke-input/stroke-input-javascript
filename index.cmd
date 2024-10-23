@@ -36,10 +36,10 @@ FixedDelimitersReplacement: #.keyboard-element
 '''
 //
   ; Stroke input
-  ,{#enabled-status} uninitialised
+  ,{#enabled-status} Uninitialised
 //
   ; Candidate order
-  ,{#candidate-order} uninitialised
+  ,{#candidate-order} Uninitialised
 '''
 
 <textarea autofocus id="input" placeholder="Enter text here">
