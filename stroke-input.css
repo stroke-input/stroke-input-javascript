@@ -1,5 +1,6 @@
 :root{
   --key-fill: #181818;
+  --umbrella-yellow: #FFFF80;
 }
 
 body {
@@ -29,4 +30,12 @@ html {
 
 #input-container {
   padding: 0.3em 0.7em;
+}
+
+#input-container table {
+  border-spacing: 1em 0;
+}
+
+#stroke-sequence {
+  color: var(--umbrella-yellow);
 }
