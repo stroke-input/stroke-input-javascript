@@ -851,8 +851,11 @@ class UserInterface
 
   static updateCandidateOrder(isTraditionalPreferred)
   {
-    let candidateOrderStatusText = isTraditionalPreferred ? "Traditional first" : "Simplified first";
-    document.getElementById("candidate-order").textContent = candidateOrderStatusText;
+    let candidateOrderHtml =
+            (isTraditionalPreferred)
+              ? 'Traditional first (<span lang="zh-Hant">繁體先</span>)'
+              : 'Simplified first (<span lang="zh-Hans">简体先</span>)';
+    document.getElementById("candidate-order").innerHTML = candidateOrderHtml;
 
     let elementLanguage = isTraditionalPreferred ? "zh-Hant" : "zh-Hans";
     document.getElementById("stroke-sequence").lang = elementLanguage;
