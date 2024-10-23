@@ -18,6 +18,11 @@ let MAX_PREFIX_MATCH_COUNT = 30;
 let MAX_PHRASE_LENGTH = 6;
 let CANDIDATE_COUNT_PER_PAGE = 10;
 
+let STROKE_DIGIT_FROM_KEY = new Map(
+  ["UIOJK", "HSPDZ"]
+  .map(keys => [...keys].map((letter, index) => [letter, index+1]))
+  .flat()
+);
 let ORDINARY_PUNCTUATION_CHARACTER_FROM_KEY = new Map([
   [";", "；"], // U+FF1B FULLWIDTH SEMICOLON
   ["\\", "、"], // U+3001 IDEOGRAPHIC COMMA
@@ -951,43 +956,13 @@ async function keyListener(event, strokeInputService)
     return;
   }
 
-  // Stroke 1
-  if (/^[uh]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  // Stroke
+  let keyUpperCase = key.toUpperCase();
+  if (STROKE_DIGIT_FROM_KEY.has(keyUpperCase) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    strokeInputService.effectStrokeAppend(1);
-    return;
-  }
-
-  // Stroke 2
-  if (/^[is]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
-  {
-    event.preventDefault();
-    strokeInputService.effectStrokeAppend(2);
-    return;
-  }
-
-  // Stroke 3
-  if (/^[op]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
-  {
-    event.preventDefault();
-    strokeInputService.effectStrokeAppend(3);
-    return;
-  }
-
-  // Stroke 4
-  if (/^[jd]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
-  {
-    event.preventDefault();
-    strokeInputService.effectStrokeAppend(4);
-    return;
-  }
-
-  // Stroke 5
-  if (/^[kz]$/i.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
-  {
-    event.preventDefault();
-    strokeInputService.effectStrokeAppend(5);
+    let strokeDigit = STROKE_DIGIT_FROM_KEY.get(keyUpperCase);
+    strokeInputService.effectStrokeAppend(strokeDigit);
     return;
   }
 
