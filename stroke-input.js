@@ -530,6 +530,15 @@ class StrokeInputService
     UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
   }
 
+  async onCandidatesPreviousPage()
+  {
+    await this._isLoaded;
+
+    this.candidatesPageIndex = Math.max(0, this.candidatesPageIndex - 1);
+
+    UserInterface.updateCandidates(this.candidates, this.candidatesPageIndex);
+  }
+
   async computeCandidates(strokeDigitSequence)
   {
     await this._isLoaded;
@@ -841,7 +850,7 @@ async function keyListener(event, strokeInputService)
   if (["PageUp", "ArrowUp"].includes(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    console.log("CANDIDATES_PAGE_PREVIOUS"); // TODO: logic
+    strokeInputService.onCandidatesPreviousPage();
     return;
   }
 
