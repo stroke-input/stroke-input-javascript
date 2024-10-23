@@ -388,11 +388,15 @@ class StrokeInputService
       this.commonCodePoints = this.commonCodePointsSimplified;
       this.phrases = this.phrasesSimplified;
     }
+
+    UserInterface.focusInputElement();
   }
 
   async effectStrokeAppend(strokeDigit)
   {
     await this._isLoaded;
+
+    UserInterface.focusInputElement();
 
     let newStrokeDigitSequence = this.strokeDigitSequence + strokeDigit;
     let newCandidates = await this.computeCandidates(newStrokeDigitSequence);
@@ -402,7 +406,6 @@ class StrokeInputService
       this.candidates = newCandidates;
       this.candidatesPageIndex = 0;
 
-      UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
       UserInterface.updateCandidates(await this.getShownCandidates());
     }
@@ -477,9 +480,14 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (this.strokeDigitSequence || !UserInterface.isInputElementFocused())
+    if (!UserInterface.isInputElementFocused())
     {
       UserInterface.focusInputElement();
+      return;
+    }
+
+    if (this.strokeDigitSequence)
+    {
       return;
     }
 
@@ -518,6 +526,7 @@ class StrokeInputService
 
     this.candidatesPageIndex = 0;
 
+    UserInterface.focusInputElement();
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
@@ -527,6 +536,7 @@ class StrokeInputService
 
     this.candidatesPageIndex = await this.getCandidatesLastPageIndex();
 
+    UserInterface.focusInputElement();
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
@@ -536,6 +546,7 @@ class StrokeInputService
 
     this.candidatesPageIndex = Math.max(0, this.candidatesPageIndex - 1);
 
+    UserInterface.focusInputElement();
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
@@ -546,6 +557,7 @@ class StrokeInputService
     let lastPageIndex = await this.getCandidatesLastPageIndex();
     this.candidatesPageIndex = Math.min(lastPageIndex, this.candidatesPageIndex + 1);
 
+    UserInterface.focusInputElement();
     UserInterface.updateCandidates(await this.getShownCandidates());
   }
 
@@ -880,6 +892,7 @@ async function keyListener(event, strokeInputService)
   if (/^[!-~]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
+    UserInterface.focusInputElement();
     return;
   }
 }
