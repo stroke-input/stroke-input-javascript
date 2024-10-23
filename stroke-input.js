@@ -1,10 +1,10 @@
-let SEQUENCE_CHARACTERS_FILE_NAME = "res/sequence-characters.txt";
-let CHARACTERS_FILE_NAME_TRADITIONAL = "res/characters-traditional.txt";
-let CHARACTERS_FILE_NAME_SIMPLIFIED = "res/characters-simplified.txt";
-let RANKING_FILE_NAME_TRADITIONAL = "res/ranking-traditional.txt";
-let RANKING_FILE_NAME_SIMPLIFIED = "res/ranking-simplified.txt";
-let PHRASES_FILE_NAME_TRADITIONAL = "res/phrases-traditional.txt";
-let PHRASES_FILE_NAME_SIMPLIFIED = "res/phrases-simplified.txt";
+let SEQUENCE_CHARACTERS_FILE_NAME = "data/sequence-characters.txt";
+let CHARACTERS_FILE_NAME_TRADITIONAL = "data/characters-traditional.txt";
+let CHARACTERS_FILE_NAME_SIMPLIFIED = "data/characters-simplified.txt";
+let RANKING_FILE_NAME_TRADITIONAL = "data/ranking-traditional.txt";
+let RANKING_FILE_NAME_SIMPLIFIED = "data/ranking-simplified.txt";
+let PHRASES_FILE_NAME_TRADITIONAL = "data/phrases-traditional.txt";
+let PHRASES_FILE_NAME_SIMPLIFIED = "data/phrases-simplified.txt";
 
 let LAG_PREVENTION_CODE_POINT_COUNT = 1400;
 let CJK_MAIN_CODE_POINT_START = 0x4E00;
