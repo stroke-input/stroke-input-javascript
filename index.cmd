@@ -81,7 +81,7 @@ FixedDelimitersReplacement: #.keyboard-element
     , [;][\\][?][!][,][.][(][)][:][~]
   //
     , Type special symbol classes
-    , [']["][\[][\]][<][>][|][`][$][*][%][=]
+    , [']["][\[][\]][\<][\>][|][`][$][*][%][=]
   //
     , Scroll candidates
     , [↑][↓] (or [PgUp][PgDn]) and ([Home][End])
