@@ -18,6 +18,14 @@ html {
   max-width: 44em;
 }
 
+.disabled {
+  color: #FF5E5E;
+}
+
+.enabled {
+  color: lime;
+}
+
 #input {
   box-sizing: border-box;
   display: block;

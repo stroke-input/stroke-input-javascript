@@ -845,8 +845,11 @@ class UserInterface
 
   static updateEnabledStatus(isEnabled)
   {
+    let enabledStatusElement = document.getElementById("enabled-status");
+    let enabledStatusClass = isEnabled ? "enabled" : "disabled";
     let enabledStatusText = isEnabled ? "Enabled" : "Disabled";
-    document.getElementById("enabled-status").textContent = enabledStatusText;
+    enabledStatusElement.className = enabledStatusClass;
+    enabledStatusElement.textContent = enabledStatusText;
   }
 
   static updateCandidateOrder(isTraditionalPreferred)
