@@ -664,12 +664,11 @@ class StrokeInputService
         {
           prefixMatchPhraseCompletions.push(phraseCompletion);
         }
-
-        prefixMatchPhraseCompletions.sort(
-          Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, [])
-        );
       }
 
+      prefixMatchPhraseCompletions.sort(
+        Comparer.candidateCodePointComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, [])
+      );
       phraseCompletionCandidates.push(...prefixMatchPhraseCompletions);
     }
 
