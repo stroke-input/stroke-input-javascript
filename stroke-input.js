@@ -18,7 +18,7 @@ let MAX_PREFIX_MATCH_COUNT = 30;
 let MAX_PHRASE_LENGTH = 6;
 let CANDIDATE_COUNT_PER_PAGE = 10;
 
-let CHARACTER_FROM_ORDINARY_PUNCTUATION = new Map([
+let ORDINARY_PUNCTUATION_CHARACTER_FROM_KEY = new Map([
   [";", "；"], // U+FF1B FULLWIDTH SEMICOLON
   ["\\", "、"], // U+3001 IDEOGRAPHIC COMMA
   ["?", "？"], // U+FF1F FULLWIDTH QUESTION MARK
@@ -971,10 +971,10 @@ async function keyListener(event, strokeInputService)
   }
 
   // Ordinary punctuation
-  if (CHARACTER_FROM_ORDINARY_PUNCTUATION.has(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  if (ORDINARY_PUNCTUATION_CHARACTER_FROM_KEY.has(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
     event.preventDefault();
-    let punctuationCharacter = CHARACTER_FROM_ORDINARY_PUNCTUATION.get(key);
+    let punctuationCharacter = ORDINARY_PUNCTUATION_CHARACTER_FROM_KEY.get(key);
     strokeInputService.effectOrdinaryPunctuationKey(punctuationCharacter);
     return;
   }
