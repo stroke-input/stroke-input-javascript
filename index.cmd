@@ -28,7 +28,7 @@ FixedDelimitersReplacement: #.keyboard-element
 
 <noscript>
 --
-**JavaScript is required for this implementation of stroke input method to function.**
+**{.disabled} JavaScript is required for this implementation of stroke input method to function.**
 --
 </noscript>
 
