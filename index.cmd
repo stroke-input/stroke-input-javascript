@@ -5,6 +5,11 @@ OrdinaryDictionaryReplacement: #.boilerplate-properties-override
 * %head-elements-before-viewport -->
     <meta name="description" content="A JavaScript implementation of the stroke input method (筆畫輸入法), for desktop browser.">
 * %head-elements-after-viewport -->
+    <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" href="stroke-input.min.css">
     <script>let FIREFOX_FOUC_FIX;</script>
     <script defer src="stroke-input.min.js"></script>
