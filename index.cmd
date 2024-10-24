@@ -62,7 +62,7 @@ A port of [Stroke Input Method (筆畫輸入法) for Android][stroke-input-andro
 
 '''
 //
-  ; Stroke input status
+  ; Stroke input
   ,{#enabled-status} Uninitialised
 //
   ; Candidate order
