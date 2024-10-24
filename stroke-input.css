@@ -50,6 +50,14 @@ html {
   max-width: 44em;
 }
 
+img {
+  vertical-align: middle;
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
 button {
   font-size: 16px;
   margin: 0.1em 0.15em;
