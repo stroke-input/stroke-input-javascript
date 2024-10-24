@@ -18,8 +18,9 @@ RegexDictionaryReplacement: #.chinese-lang
 FixedDelimitersReplacement: #.keyboard-element
 - queue_position: AFTER #inline-semantics
 - syntax_type: INLINE
-- opening_delimiter: [
-- closing_delimiter: ]
+- opening_delimiter: {
+- content_replacements: #escape-html
+- closing_delimiter: }
 - tag_name: kbd
 
 %%%
@@ -68,25 +69,25 @@ FixedDelimitersReplacement: #.keyboard-element
 |:
   //
     , Toggle stroke input
-    , [F2]
+    , {F2}
   //
     , Toggle candidate order
-    , [F9]
+    , {F9}
   //
     , Type strokes (<span class="strokes">㇐㇑㇒㇔㇖</span>)
-    , [U][I][O][J][K] (or [H][S][P][D][Z])
+    , {U}{I}{O}{J}{K} (or {H}{S}{P}{D}{Z})
   //
     , Select candidate
-    , [1][2][3][4][5][6][7][8][9][0]
+    , {1}{2}{3}{4}{5}{6}{7}{8}{9}{0}
   //
     , Type ordinary punctuation
-    , [;][\\][?][!][,][.][(][)][:][~]
+    , {;}{\\}{?}{!}{,}{.}{(}{)}{:}{~}
   //
     , Type special symbol classes
-    , [']["][\[][\]][\<][\>][|][`][$][*][%][=]
+    , {'}{"}{[}{]}{<}{>}{|}{`}{$}{*}{%}{=}
   //
     , Scroll candidates
-    , [↑][↓] (or [PgUp][PgDn]) and [Home][End]
+    , {↑}{↓} (or {PgUp}{PgDn}) and {Home}{End}
 ''''
 
 
