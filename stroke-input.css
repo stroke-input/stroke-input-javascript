@@ -19,10 +19,6 @@ html {
   max-width: 44em;
 }
 
-tr {
-  height: 2em;
-}
-
 .candidate-group {
   display: inline-block;
 }
@@ -39,7 +35,8 @@ tr {
 }
 
 .candidates-row {
-  height: 4em;
+  line-height: 1.7;
+  vertical-align: baseline;
 }
 
 .disabled {
@@ -48,6 +45,10 @@ tr {
 
 .enabled {
   color: lime;
+}
+
+#candidates {
+  margin: 0;
 }
 
 #input {
@@ -65,7 +66,11 @@ tr {
 }
 
 #input-container table {
-  border-spacing: 1em 0;
+  border-spacing: 1em 0.5em;
+  table-layout: fixed;
+}
+#input-container th {
+  width: 7em;
 }
 
 #stroke-sequence {
