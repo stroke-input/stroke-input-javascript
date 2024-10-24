@@ -35,6 +35,7 @@ html {
 }
 
 .candidates-row {
+  height: 7em;
   line-height: 1.7;
   vertical-align: baseline;
 }
@@ -56,12 +57,13 @@ html {
   display: block;
   font-size: 16px;
   height: 12em;
-  margin: 1em auto;
+  margin: 0.5em auto;
   width: 100%;
   resize: vertical;
 }
 
 #input-container {
+  border: 2px solid white;
   padding: 0.3em 0.7em;
 }
 
