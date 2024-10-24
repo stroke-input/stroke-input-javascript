@@ -49,7 +49,7 @@ FixedDelimitersReplacement: #.keyboard-element
 '''
 //
   ; Stroke sequence
-  ,{#stroke-sequence}
+  ,{#stroke-sequence .strokes}
 //{.candidates-row}
   ; Candidates
   ,
@@ -76,7 +76,7 @@ FixedDelimitersReplacement: #.keyboard-element
     , Toggle candidate order
     , [F9]
   //
-    , Type strokes
+    , Type strokes (<span class="strokes">㇐㇑㇒㇔㇖</span>)
     , [U][I][O][J][K] (or [H][S][P][D][Z])
   //
     , Select candidate
@@ -89,7 +89,7 @@ FixedDelimitersReplacement: #.keyboard-element
     , [']["][\[][\]][\<][\>][|][`][$][*][%][=]
   //
     , Scroll candidates
-    , [↑][↓] (or [PgUp][PgDn]) and ([Home][End])
+    , [↑][↓] (or [PgUp][PgDn]) and [Home][End]
 ''''
 
 

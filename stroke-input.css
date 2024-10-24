@@ -66,6 +66,11 @@ html {
   color: lime;
 }
 
+.strokes {
+  color: var(--umbrella-yellow);
+  font-family: 'Stroke Input Font';
+}
+
 #candidates {
   margin: 0;
 }
@@ -96,9 +101,4 @@ html {
 }
 #input-container th {
   width: 7em;
-}
-
-#stroke-sequence {
-  color: var(--umbrella-yellow);
-  font-family: 'Stroke Input Font';
 }
