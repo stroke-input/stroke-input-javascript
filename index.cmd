@@ -180,5 +180,5 @@ Licensed under Apache-2.0, see [apache-2]. <br>
 
 
 <footer>
-[Go up a level to home page](https://stroke-input.github.io)
+[Go up a level to home page](/) <## (this repository will be a submodule of stroke-input.github.io) ##>
 </footer>
