@@ -840,7 +840,13 @@ class UserInterface
 {
   static initialiseKeys(strokeInputService)
   {
-    document.addEventListener("keydown", event => keyListener(event, strokeInputService));
+    document.addEventListener("keydown", event => eventListener(event, strokeInputService));
+
+    let buttons = document.getElementsByTagName('button');
+    for (const button of buttons)
+    {
+      button.addEventListener("click", event => eventListener(event, strokeInputService));
+    }
   }
 
   static updateEnabledStatus(isEnabled)
@@ -945,9 +951,23 @@ class UserInterface
   }
 }
 
-async function keyListener(event, strokeInputService)
+async function eventListener(event, strokeInputService)
 {
-  let key = event.key;
+  let key;
+  switch (event.type)
+  {
+    case "keydown":
+      key = event.key;
+      break;
+
+    case "click":
+      let buttonId = event.target.closest("button").id;
+      key = buttonId;
+      break;
+
+    default:
+      throw new Error(`bad event.type ${event.type}`);
+  }
 
   // Toggle stroke input method
   if (key === "F2" && !Keyboardy.isModified(event))
