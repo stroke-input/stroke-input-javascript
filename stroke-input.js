@@ -469,11 +469,7 @@ class StrokeInputService
     }
     else
     {
-      if (!UserInterface.isInputElementFocused())
-      {
-        UserInterface.focusInputElement();
-        return;
-      }
+      UserInterface.focusInputElement();
 
       let inputElement = UserInterface.getInputElement();
       let sunderedInputText = UserInterface.sunderInputText();
@@ -519,11 +515,7 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (!UserInterface.isInputElementFocused())
-    {
-      UserInterface.focusInputElement();
-      return;
-    }
+    UserInterface.focusInputElement();
 
     if (this.strokeDigitSequence || this.isInSpecialSymbolState)
     {
@@ -563,11 +555,7 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (!UserInterface.isInputElementFocused())
-    {
-      UserInterface.focusInputElement();
-      return;
-    }
+    UserInterface.focusInputElement();
 
     if (this.strokeDigitSequence || this.isInSpecialSymbolState)
     {
@@ -591,11 +579,7 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (!UserInterface.isInputElementFocused())
-    {
-      UserInterface.focusInputElement();
-      return;
-    }
+    UserInterface.focusInputElement();
 
     if (this.strokeDigitSequence || this.isInSpecialSymbolState)
     {
@@ -619,11 +603,7 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (!UserInterface.isInputElementFocused())
-    {
-      UserInterface.focusInputElement();
-      return;
-    }
+    UserInterface.focusInputElement();
 
     let shownCandidates = await this.getShownCandidates();
     if (index >= shownCandidates.length)
@@ -659,11 +639,7 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (!UserInterface.isInputElementFocused())
-    {
-      UserInterface.focusInputElement();
-      return;
-    }
+    UserInterface.focusInputElement();
 
     if (this.strokeDigitSequence)
     {
@@ -686,11 +662,7 @@ class StrokeInputService
   {
     await this._isLoaded;
 
-    if (!UserInterface.isInputElementFocused())
-    {
-      UserInterface.focusInputElement();
-      return;
-    }
+    UserInterface.focusInputElement();
 
     if (this.strokeDigitSequence)
     {
@@ -941,12 +913,6 @@ class UserInterface
   static isButtonFocused()
   {
     return document.activeElement.tagName === "BUTTON";
-  }
-
-  static isInputElementFocused()
-  {
-    let inputElement = UserInterface.getInputElement();
-    return document.activeElement === UserInterface.getInputElement();
   }
 
   static focusInputElement()
