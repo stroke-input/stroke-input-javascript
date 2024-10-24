@@ -167,3 +167,8 @@ Licensed under Apache-2.0, see [apache-2]. <br>
 [Conway Stroke Data]: https://github.com/stroke-input/stroke-input-data
 [Stroke Input Font]: https://github.com/stroke-input/stroke-input-font
 [2015 version of Noto Sans CJK TC]: https://github.com/googlefonts/noto-cjk/tree/2663656870e92c0dcbe891590681815ebb509c05
+
+
+<footer>
+[Go up a level to home page](https://stroke-input.github.io)
+</footer>

@@ -2,7 +2,7 @@
   --key-fill: #181818;
   --umbrella-orange: #FFCE73;
   --umbrella-yellow: #FFFF80;
-  --umbrella-blue: #A0A0FF;
+  --umbrella-blue: #BBBBFF;
 }
 
 @font-face {
@@ -22,6 +22,12 @@ body {
   margin: 0;
   overflow-wrap: break-word;
   padding: 1em;
+}
+
+footer {
+  border-top: 2px solid white;
+  margin-top: 1.5em;
+  padding-top: 0.75em;
 }
 
 h1 {
