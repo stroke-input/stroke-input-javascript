@@ -5,6 +5,7 @@
 }
 
 @font-face {
+  font-display: swap;
   font-family: 'Stroke Input Font';
   src: url('StrokeInputFont.ttf') format('truetype');
 }
