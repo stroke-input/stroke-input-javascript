@@ -961,12 +961,24 @@ async function keyListener(event, strokeInputService)
     strokeInputService.updateCandidateOrderPreference();
     if (!strokeInputService.isInSpecialSymbolState)
     {
-      strokeInputService.candidates = await strokeInputService.computeCandidates(strokeInputService.strokeDigitSequence);
+      if (strokeInputService.strokeDigitSequence)
+      {
+        strokeInputService.candidates = await strokeInputService.computeCandidates(strokeInputService.strokeDigitSequence);
+      }
+      else
+      {
+        let longestPhrasePrefix = UserInterface.getInputTextBeforeCursor(MAX_PHRASE_LENGTH - 1);
+        let phraseCompletionCandidates = await strokeInputService.computePhraseCompletionCandidates(longestPhrasePrefix);
+
+        strokeInputService.candidates = phraseCompletionCandidates;
+        strokeInputService.candidatesPageIndex = 0;
+        strokeInputService.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
+      }
     }
 
     UserInterface.focusInputElement();
     UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
-    UserInterface.updateCandidates(strokeInputService.candidates, strokeInputService.candidatesPageIndex);
+    UserInterface.updateCandidates(await strokeInputService.getShownCandidates());
     return;
   }
 
