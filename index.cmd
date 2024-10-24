@@ -5,7 +5,7 @@ OrdinaryDictionaryReplacement: #.boilerplate-properties-override
 * %head-elements-before-viewport -->
     <meta name="description" content="A JavaScript implementation of the stroke input method (筆畫輸入法), for desktop browser.">
 * %head-elements-after-viewport -->
-    <link rel="stylesheet" href="stroke-input.css">
+    <link rel="stylesheet" href="stroke-input.min.css">
     <script>let FIREFOX_FOUC_FIX;</script>
     <script defer src="stroke-input.js"></script>
 
