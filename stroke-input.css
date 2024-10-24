@@ -18,6 +18,14 @@ html {
   max-width: 44em;
 }
 
+tr {
+  height: 2em;
+}
+
+.candidates-row {
+  height: 4em;
+}
+
 .disabled {
   color: #FF5E5E;
 }
@@ -31,7 +39,7 @@ html {
   display: block;
   font-size: 16px;
   height: 12em;
-  margin: 0.3em auto;
+  margin: 1em auto;
   width: 100%;
   resize: vertical;
 }

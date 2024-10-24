@@ -49,7 +49,7 @@ FixedDelimitersReplacement: #.keyboard-element
 //
   ; Stroke sequence
   ,{#stroke-sequence}
-//
+//{.candidates-row}
   ; Candidates
   ,{#candidates}
 '''
