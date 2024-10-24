@@ -2,12 +2,17 @@
   --key-fill: #181818;
   --umbrella-orange: #FFCE73;
   --umbrella-yellow: #FFFF80;
+  --umbrella-blue: #A0A0FF;
 }
 
 @font-face {
   font-display: swap;
   font-family: 'Stroke Input Font';
   src: url('StrokeInputFont.ttf') format('truetype');
+}
+
+a {
+  color: var(--umbrella-blue);
 }
 
 body {
@@ -27,6 +32,10 @@ h1 {
 h2 {
   font-size: 1.4em;
   margin-top: 1.5em;
+}
+
+h3 {
+  font-size: 1.1em;
 }
 
 html {
@@ -76,6 +85,12 @@ button {
 
 .enabled {
   color: lime;
+}
+
+.notice {
+  border: 1px solid white;
+  margin-top: 0.5em;
+  padding: 0.5em;
 }
 
 .strokes {

@@ -30,6 +30,20 @@ RegexDictionaryReplacement: #.keyboard-element-automatic-id
   <button id="\g<character>"><kbd>\g<character></kbd></button>
 * '"""' --> '"&quot;"'
 
+OrdinaryDictionaryReplacement: #.typography.typography
+- queue_position: BEFORE #whitespace
+- apply_mode: SIMULTANEOUS
+* (C)~ --> "© "
+* -- --> –
+
+OrdinaryDictionaryReplacement: #.links.license-links
+- queue_position: BEFORE #explicit-links
+- apply_mode: SIMULTANEOUS
+* [gpl-3] --> b<https://www.gnu.org/licenses/>
+* [apache-2] --> b<https://www.apache.org/licenses/LICENSE-2.0.html>
+* [cc-by-4] --> b<https://creativecommons.org/licenses/by/4.0/>
+* [cc0] --> b<https://creativecommons.org/publicdomain/zero/1.0/>
+
 %%%
 
 # %title
@@ -104,8 +118,52 @@ RegexDictionaryReplacement: #.keyboard-element-automatic-id
 ''''
 
 
-## TODO list
+## About
 
-++++
-1. Make this a submodule (aliased as `javascript`) of `stroke-input.github.io`
-++++
+--
+This JavaScript implementation of the stroke input method
+is free and open-source software with ABSOLUTELY NO WARRANTY.
+--
+--{.notice}
+(C)~2024 Conway <br>
+Licensed under GPL-3.0-only, see [gpl-3].
+--
+
+
+## Dependencies
+
+### [Conway Stroke Data] (v1.33.1)
+
+--
+`sequence-characters.txt` is:
+--
+--{.notice}
+(C)~2021--2024 Conway <br>
+Licensed under CC-BY-4.0, see [cc-by-4]. <br>
+--
+
+--
+Other files are:
+--
+--{.notice}
+Released into the Public Domain, see [cc0].
+--
+
+### [Stroke Input Font] (v2.0.1)
+
+--{.notice}
+(C)~2021--2022 Conway <br>
+Licensed under GPL-3.0-only, see [gpl-3]. <br>
+--
+--
+Modified from a [2015 version of Noto Sans CJK TC],
+which is:
+--
+--{.notice}
+(C)~2015 Google and others <br>
+Licensed under Apache-2.0, see [apache-2]. <br>
+--
+
+[Conway Stroke Data]: https://github.com/stroke-input/stroke-input-data
+[Stroke Input Font]: https://github.com/stroke-input/stroke-input-font
+[2015 version of Noto Sans CJK TC]: https://github.com/googlefonts/noto-cjk/tree/2663656870e92c0dcbe891590681815ebb509c05
