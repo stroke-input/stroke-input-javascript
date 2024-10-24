@@ -1,5 +1,6 @@
 :root{
   --key-fill: #181818;
+  --umbrella-orange: #FFCE73;
   --umbrella-yellow: #FFFF80;
 }
 
@@ -20,6 +21,21 @@ html {
 
 tr {
   height: 2em;
+}
+
+.candidate-group {
+  display: inline-block;
+}
+.candidate-group dd {
+  color: var(--umbrella-orange);
+  display: inline;
+  margin: 0 1em 0 0.3em;
+}
+.candidate-group dt {
+  display: inline;
+}
+.candidate-group dt::after {
+  content: ':';
 }
 
 .candidates-row {

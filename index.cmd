@@ -51,7 +51,9 @@ FixedDelimitersReplacement: #.keyboard-element
   ,{#stroke-sequence}
 //{.candidates-row}
   ; Candidates
-  ,{#candidates}
+  ,
+    <dl id="candidates">
+    </dl>
 '''
 
 ||||

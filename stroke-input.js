@@ -893,8 +893,11 @@ class UserInterface
     let readableShownCandidates = [...shownCandidates].map(candidate => readabilityMap.get(candidate) || candidate);
     let newInnerHtml =
             readableShownCandidates
-            .map((candidate, index) => `<kbd>${(index + 1) % 10}</kbd>: ${candidate}`)
-            .join("<br>");
+            .map(
+              (candidate, index) =>
+              `<div class="candidate-group"><dt>${(index + 1) % 10}</dt><dd>${candidate}</dd></div>`
+            )
+            .join("\n");
     document.getElementById("candidates").innerHTML = newInnerHtml;
   }
 
