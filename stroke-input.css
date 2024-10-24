@@ -34,6 +34,18 @@ html {
   max-width: 44em;
 }
 
+kbd {
+  border: 2px grey solid;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0.1em 0.15em;
+  min-width: 1em;
+  padding: 0.25em 0.3em;
+  text-align: center;
+  vertical-align: middle;
+  white-space: pre;
+}
+
 .candidate-group {
   display: inline-block;
 }
@@ -56,6 +68,10 @@ html {
 }
 .candidates-row td {
   width: 100%;
+}
+
+.controls th, .controls td {
+  padding: 0.3em;
 }
 
 .disabled {
@@ -93,6 +109,7 @@ html {
 #input-container {
   border: 2px solid white;
   padding: 0.3em 0.7em;
+  margin: 1.5em 0;
 }
 
 #input-container table {

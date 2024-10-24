@@ -60,10 +60,7 @@ FixedDelimitersReplacement: #.keyboard-element
 
 ||||
 
-
-## Controls
-
-''''
+''''{.controls}
 |^
   //
     ; Function
@@ -97,5 +94,4 @@ FixedDelimitersReplacement: #.keyboard-element
 
 ++++
 1. Make this a submodule (aliased as `javascript`) of `stroke-input.github.io`
-1. Add keyboard image with callouts for visual presentation of controls
 ++++
