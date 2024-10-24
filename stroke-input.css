@@ -39,6 +39,9 @@ html {
   line-height: 1.7;
   vertical-align: baseline;
 }
+.candidates-row td {
+  width: 100%;
+}
 
 .disabled {
   color: #FF5E5E;
@@ -50,6 +53,11 @@ html {
 
 #candidates {
   margin: 0;
+}
+
+#candidates-pagination {
+  display: block;
+  text-align: right;
 }
 
 #input {

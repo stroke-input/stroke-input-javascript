@@ -442,7 +442,7 @@ class StrokeInputService
       this.candidatesPageIndex = 0;
 
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-      UserInterface.updateCandidates(await this.getShownCandidates());
+      UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
     }
   }
 
@@ -463,7 +463,7 @@ class StrokeInputService
 
       UserInterface.focusInputElement();
       UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-      UserInterface.updateCandidates(await this.getShownCandidates());
+      UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
 
       requirePhraseCandidatesUpdate = !newStrokeDigitSequence;
     }
@@ -511,7 +511,7 @@ class StrokeInputService
       this.candidatesPageIndex = 0;
       this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
 
-      UserInterface.updateCandidates(await this.getShownCandidates());
+      UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
     }
   }
 
@@ -556,7 +556,7 @@ class StrokeInputService
     this.candidatesPageIndex = 0;
     this.phraseCompletionFirstCodePoints = [...phraseCompletionCandidates].map(Stringy.getFirstCodePoint);
 
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async effectSpaceKey()
@@ -652,7 +652,7 @@ class StrokeInputService
     this.isInSpecialSymbolState = false;
 
     UserInterface.updateStrokeSequence(this.strokeDigitSequence);
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async effectOrdinaryPunctuationKey(punctuationCharacter)
@@ -702,7 +702,7 @@ class StrokeInputService
     this.phraseCompletionFirstCodePoints = [];
     this.isInSpecialSymbolState = true;
 
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async onCandidatesFirstPage()
@@ -712,7 +712,7 @@ class StrokeInputService
     this.candidatesPageIndex = 0;
 
     UserInterface.focusInputElement();
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async onCandidatesLastPage()
@@ -722,7 +722,7 @@ class StrokeInputService
     this.candidatesPageIndex = await this.getCandidatesLastPageIndex();
 
     UserInterface.focusInputElement();
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async onCandidatesPreviousPage()
@@ -732,7 +732,7 @@ class StrokeInputService
     this.candidatesPageIndex = Math.max(0, this.candidatesPageIndex - 1);
 
     UserInterface.focusInputElement();
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async onCandidatesNextPage()
@@ -743,7 +743,7 @@ class StrokeInputService
     this.candidatesPageIndex = Math.min(lastPageIndex, this.candidatesPageIndex + 1);
 
     UserInterface.focusInputElement();
-    UserInterface.updateCandidates(await this.getShownCandidates());
+    UserInterface.updateCandidates(await this.getShownCandidates(), this.candidatesPageIndex, await this.getCandidatesLastPageIndex());
   }
 
   async computeCandidates(strokeDigitSequence)
@@ -882,7 +882,7 @@ class UserInterface
     strokeSequenceElement.title = strokeDigitSequence;
   }
 
-  static updateCandidates(shownCandidates)
+  static updateCandidates(shownCandidates, candidatesPageIndex, candidatesLastPageIndex)
   {
     let readabilityMap = new Map([
       ["\u302a", "平〪"],
@@ -899,6 +899,12 @@ class UserInterface
             )
             .join("\n");
     document.getElementById("candidates").innerHTML = newInnerHtml;
+
+    let candidatesPaginationText =
+            (shownCandidates.length)
+              ? `(Page ${candidatesPageIndex + 1} of ${candidatesLastPageIndex + 1})`
+              : "";
+    document.getElementById("candidates-pagination").textContent = candidatesPaginationText;
   }
 
   static getInputElement()
@@ -978,7 +984,11 @@ async function keyListener(event, strokeInputService)
 
     UserInterface.focusInputElement();
     UserInterface.updateCandidateOrder(strokeInputService.isTraditionalPreferred);
-    UserInterface.updateCandidates(await strokeInputService.getShownCandidates());
+    UserInterface.updateCandidates(
+      await strokeInputService.getShownCandidates(),
+      strokeInputService.candidatesPageIndex,
+      await strokeInputService.getCandidatesLastPageIndex(),
+    );
     return;
   }
 

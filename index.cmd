@@ -55,6 +55,7 @@ FixedDelimitersReplacement: #.keyboard-element
   ,
     <dl id="candidates">
     </dl>
+    <span id="candidates-pagination"></span>
 '''
 
 ||||
