@@ -910,9 +910,10 @@ class UserInterface
     return Stringy.keepTrailingCharacters(textBeforeCursor, targetLength);
   }
 
-  static isButtonFocused()
+  static isNonEnterButtonFocused()
   {
-    return document.activeElement.tagName === "BUTTON";
+    let focusedElement = document.activeElement;
+    return focusedElement.tagName === "BUTTON" && focusedElement.id !== "Enter";
   }
 
   static focusInputElement()
@@ -1033,7 +1034,7 @@ async function eventListener(event, strokeInputService)
   // Enter
   if (key === "Enter")
   {
-    if (UserInterface.isButtonFocused())
+    if (UserInterface.isNonEnterButtonFocused())
     {
       return;
     }
