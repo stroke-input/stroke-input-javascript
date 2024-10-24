@@ -7,7 +7,7 @@ OrdinaryDictionaryReplacement: #.boilerplate-properties-override
 * %head-elements-after-viewport -->
     <link rel="stylesheet" href="stroke-input.min.css">
     <script>let FIREFOX_FOUC_FIX;</script>
-    <script defer src="stroke-input.js"></script>
+    <script defer src="stroke-input.min.js"></script>
 
 RegexDictionaryReplacement: #.chinese-lang
 - queue_position: BEFORE #escape-idle-html
