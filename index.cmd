@@ -95,6 +95,12 @@ RegexDictionaryReplacement: #.keyboard-element-automatic-id
   //
     , Scroll candidates
     , {↑}{↓} (or {PgUp}{PgDn}) and {Home}{End}
+  //
+    , Assorted erasure
+    , {Backspace}{Delete}
+  //
+    , Commit first candidate
+    , {Spacebar}{Enter}
 ''''
 
 

@@ -937,6 +937,7 @@ async function eventListener(event, strokeInputService)
         ["↓", "ArrowDown"],
         ["PgUp", "PageUp"],
         ["PgDn", "PageDown"],
+        ["Spacebar", " "],
       ]);
       let buttonId = event.target.closest("button").id;
       key = keyMap.get(buttonId) || buttonId;
