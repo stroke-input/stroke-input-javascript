@@ -932,8 +932,14 @@ async function eventListener(event, strokeInputService)
       break;
 
     case "click":
+      let keyMap = new Map([
+        ["↑", "ArrowUp"],
+        ["↓", "ArrowDown"],
+        ["PgUp", "PageUp"],
+        ["PgDn", "PageDown"],
+      ]);
       let buttonId = event.target.closest("button").id;
-      key = buttonId;
+      key = keyMap.get(buttonId) || buttonId;
       break;
 
     default:
