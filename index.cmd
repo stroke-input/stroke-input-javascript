@@ -54,6 +54,10 @@ OrdinaryDictionaryReplacement: #.links.license-links
 --
 </noscript>
 
+--
+A port of [Stroke Input Method (筆畫輸入法) for Android][stroke-input-android].
+--
+
 ||||{#input-container}
 
 '''
@@ -164,6 +168,7 @@ which is:
 Licensed under Apache-2.0, see [apache-2]. <br>
 --
 
+[stroke-input-android]: https://github.com/stroke-input/stroke-input-android
 [Conway Stroke Data]: https://github.com/stroke-input/stroke-input-data
 [Stroke Input Font]: https://github.com/stroke-input/stroke-input-font
 [2015 version of Noto Sans CJK TC]: https://github.com/googlefonts/noto-cjk/tree/2663656870e92c0dcbe891590681815ebb509c05
