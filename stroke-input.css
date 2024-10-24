@@ -4,6 +4,11 @@
   --umbrella-yellow: #FFFF80;
 }
 
+@font-face {
+  font-family: 'Stroke Input Font';
+  src: url('StrokeInputFont.ttf') format('truetype');
+}
+
 body {
   background: black;
   color: white;
@@ -95,4 +100,5 @@ html {
 
 #stroke-sequence {
   color: var(--umbrella-yellow);
+  font-family: 'Stroke Input Font';
 }
