@@ -6,6 +6,7 @@ OrdinaryDictionaryReplacement: #.boilerplate-properties-override
     <meta name="description" content="A JavaScript implementation of the stroke input method (筆畫輸入法), for desktop browser.">
 * %head-elements-after-viewport -->
     <link rel="stylesheet" href="stroke-input.css">
+    <script>let FIREFOX_FOUC_FIX;</script>
     <script defer src="stroke-input.js"></script>
 
 RegexDictionaryReplacement: #.chinese-lang
