@@ -114,9 +114,5 @@ kbd {
 }
 
 #input-container table {
-  border-spacing: 1em 0.5em;
-  table-layout: fixed;
-}
-#input-container th {
-  width: 7em;
+  border-spacing: 0.7em 0.5em;
 }
