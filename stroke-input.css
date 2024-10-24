@@ -24,6 +24,13 @@ body {
   padding: 1em;
 }
 
+button {
+  font-size: 16px;
+  margin: 0.1em 0.15em;
+  min-width: 1em;
+  padding: 0.25em 0.3em;
+}
+
 footer {
   border-top: 2px solid white;
   margin-top: 1.5em;
@@ -56,13 +63,6 @@ img {
 
 li {
   margin-bottom: 0.5em;
-}
-
-button {
-  font-size: 16px;
-  margin: 0.1em 0.15em;
-  min-width: 1em;
-  padding: 0.25em 0.3em;
 }
 
 .candidate-group {
