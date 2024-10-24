@@ -27,7 +27,7 @@ RegexDictionaryReplacement: #.keyboard-element-automatic-id
 - queue_position: AFTER #.keyboard-element
 * <kbd> (?P<character> \S+? ) </kbd>
     -->
-  <kbd id="\g<character>">\g<character></kbd>
+  <button id="\g<character>"><kbd>\g<character></kbd></button>
 * '"""' --> '"&quot;"'
 
 %%%
