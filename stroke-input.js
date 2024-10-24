@@ -938,6 +938,11 @@ class UserInterface
     return Stringy.keepTrailingCharacters(textBeforeCursor, targetLength);
   }
 
+  static isButtonFocused()
+  {
+    return document.activeElement.tagName === "BUTTON";
+  }
+
   static isInputElementFocused()
   {
     let inputElement = UserInterface.getInputElement();
@@ -1055,6 +1060,11 @@ async function eventListener(event, strokeInputService)
   // Enter
   if (key === "Enter")
   {
+    if (UserInterface.isButtonFocused())
+    {
+      return;
+    }
+
     event.preventDefault();
     strokeInputService.effectEnterKey();
     return;
