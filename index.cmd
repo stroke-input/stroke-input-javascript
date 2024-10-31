@@ -105,7 +105,7 @@ A port of [Stroke Input Method (筆畫輸入法) for Android][stroke-input-andro
     , {F9}
   //
     , Type strokes (<span class="strokes">㇐㇑㇒㇔㇖</span>)
-    , {U}{I}{O}{J}{K} (or {H}{S}{P}{D}{Z})
+    , {U}{I}{O}{J}{K} (or {H}{S}{P}{D}{Z} or {Num1}{Num2}{Num3}{Num4}{Num5})
   //
     , Select candidate
     , {1}{2}{3}{4}{5}{6}{7}{8}{9}{0}

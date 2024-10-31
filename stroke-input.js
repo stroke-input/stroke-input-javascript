@@ -926,10 +926,13 @@ class UserInterface
 async function eventListener(event, strokeInputService)
 {
   let key;
+  let isNumpad;
+
   switch (event.type)
   {
     case "keydown":
       key = event.key;
+      isNumpad = event.code.startsWith("Numpad");
       break;
 
     case "click":
@@ -940,9 +943,11 @@ async function eventListener(event, strokeInputService)
         ["PgUp", "PageUp"],
         ["PgDn", "PageDown"],
         ["Spacebar", " "],
+        ...[...Array(10).keys()].map(digit => [`Num${digit}`, `${digit}`]),
       ]);
       let buttonId = event.target.closest("button").id;
       key = keyMap.get(buttonId) || buttonId;
+      isNumpad = buttonId.startsWith("Num");
       break;
     }
 
@@ -999,7 +1004,19 @@ async function eventListener(event, strokeInputService)
     return;
   }
 
-  // Stroke
+  // Stroke (numpad digits)
+  if (isNumpad && /^[0-9]$/.test(key) && !Keyboardy.isModifiedCtrlAltMeta(event))
+  {
+    event.preventDefault();
+    if (/^[1-5]$/.test(key))
+    {
+      let strokeDigit = key;
+      strokeInputService.effectStrokeAppend(strokeDigit);
+    }
+    return;
+  }
+
+  // Stroke (letters)
   let keyUpperCase = key.toUpperCase();
   if (STROKE_DIGIT_FROM_KEY.has(keyUpperCase) && !Keyboardy.isModifiedCtrlAltMeta(event))
   {
