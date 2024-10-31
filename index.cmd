@@ -1,7 +1,7 @@
 OrdinaryDictionaryReplacement: #.boilerplate-properties-override
 - queue_position: BEFORE #boilerplate-properties
 - apply_mode: SEQUENTIAL
-* %title --> Stroke input method (筆畫輸入法): JavaScript v0.1.1
+* %title --> Stroke input method (筆畫輸入法): JavaScript v0.2.0
 * %head-elements-before-viewport -->
     <meta name="description" content="A JavaScript implementation of the stroke input method (筆畫輸入法), for desktop browser.">
 * %head-elements-after-viewport -->
