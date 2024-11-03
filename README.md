@@ -3,7 +3,7 @@
 A JavaScript port of [Stroke Input Method (筆畫輸入法) for Android].
 
 
-## Building
+## Workflow
 
 Dependencies:
 
