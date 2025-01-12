@@ -134,7 +134,7 @@ This JavaScript implementation of the stroke input method
 is free and open-source software with ABSOLUTELY NO WARRANTY.
 --
 --{.notice}
-(C)~2024 Conway <br>
+(C)~2024--2025 Conway <br>
 Licensed under GPL-3.0-only, see [gpl-3].
 --
 

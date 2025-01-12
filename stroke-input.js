@@ -727,10 +727,12 @@ class StrokeInputService
       return [];
     }
 
+    let exactMatchCodePoints;
     let exactMatchCandidates;
     let exactMatchCharacters = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "exact");
     if (exactMatchCharacters)
     {
+      exactMatchCodePoints = new Set(Stringy.toCodePoints(exactMatchCharacters));
       exactMatchCandidates = [...exactMatchCharacters];
       exactMatchCandidates.sort(
         Comparer.candidateComparator(this.unpreferredCodePoints, this.sortingRankFromCodePoint, this.phraseCompletionFirstCodePoints)
@@ -738,11 +740,14 @@ class StrokeInputService
     }
     else
     {
+      exactMatchCodePoints = new Set();
       exactMatchCandidates = [];
     }
 
     let prefixMatchCharactersCollection = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "prefix");
     let prefixMatchCodePoints = new Set(Stringy.toCodePoints(prefixMatchCharactersCollection));
+
+    prefixMatchCodePoints = new Set([...prefixMatchCodePoints].filter(codePoint => !exactMatchCodePoints.has(codePoint)));
     if (prefixMatchCodePoints.size > LAG_PREVENTION_CODE_POINT_COUNT)
     {
       prefixMatchCodePoints = new Set([...this.commonCodePoints].filter(codePoint => prefixMatchCodePoints.has(codePoint)));
