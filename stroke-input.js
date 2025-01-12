@@ -744,8 +744,8 @@ class StrokeInputService
       exactMatchCandidates = [];
     }
 
-    let prefixMatchCharactersCollection = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "prefix");
-    let prefixMatchCodePoints = new Set(Stringy.toCodePoints(prefixMatchCharactersCollection));
+    let prefixMatchCharacters = this.charactersFromStrokeDigitSequence.lookup(strokeDigitSequence, "prefix");
+    let prefixMatchCodePoints = new Set(Stringy.toCodePoints(prefixMatchCharacters));
 
     prefixMatchCodePoints = new Set([...prefixMatchCodePoints].filter(codePoint => !exactMatchCodePoints.has(codePoint)));
     if (prefixMatchCodePoints.size > LAG_PREVENTION_CODE_POINT_COUNT)
