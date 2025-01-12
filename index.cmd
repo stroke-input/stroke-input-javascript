@@ -141,7 +141,7 @@ Licensed under GPL-3.0-only, see [gpl-3].
 
 ## Dependencies
 
-### [Conway Stroke Data] (v1.33.1)
+### [Conway Stroke Data] (v1.34.0)
 
 --
 `sequence-characters.txt` is:
