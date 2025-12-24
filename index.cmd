@@ -147,7 +147,7 @@ Licensed under GPL-3.0-only, see [gpl-3].
 `sequence-characters.txt` is:
 --
 --{.notice}
-(C)~2021--2024 Conway <br>
+(C)~2021--2025 Conway <br>
 Licensed under CC-BY-4.0, see [cc-by-4]. <br>
 --
 

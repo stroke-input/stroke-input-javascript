@@ -24,7 +24,7 @@ $ terser stroke-input.js -o stroke-input.min.js
 
 ## License
 
-**Copyright 2024 Conway** <br>
+**Copyright 2024--2025 Conway** <br>
 Licensed under the GNU General Public License v3.0 (GPL-3.0-only). <br>
 This is free software with NO WARRANTY etc. etc., see [LICENSE]. <br>
 
