@@ -134,20 +134,20 @@ This JavaScript implementation of the stroke input method
 is free and open-source software with ABSOLUTELY NO WARRANTY.
 --
 --{.notice}
-(C)~2024--2025 Conway <br>
+(C)~2024--2026 Conway <br>
 Licensed under GPL-3.0-only, see [gpl-3].
 --
 
 
 ## Dependencies
 
-### [Conway Stroke Data] (v2.0.0)
+### [Conway Stroke Data] (v2.0.2)
 
 --
 `sequence-characters.txt` is:
 --
 --{.notice}
-(C)~2021--2025 Conway <br>
+(C)~2021--2026 Conway <br>
 Licensed under CC-BY-4.0, see [cc-by-4]. <br>
 --
 
